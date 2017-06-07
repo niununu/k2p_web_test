@@ -11,7 +11,7 @@
 ##############################################################
 import sys 
 #sys.path.append('../data')
-sys.path.append('../../webTestK2P')
+sys.path.append('../../k2p_web_test')
 #import login, networkset, adapter, backupRestore, changeUserPwd, guide
 #import loginData, networksetData, backupRestoreData, changeUserPwdData, guideData
 from data import *

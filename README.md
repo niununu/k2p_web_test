@@ -1,4 +1,4 @@
-# webTestK2P
+# k2p_web_test
 k2p新ui页面自动化测试
 # 各目录文件说明
 ## api
