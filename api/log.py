@@ -36,7 +36,7 @@ def wirteWebErrToLog(funcName, errName="", xpath=""):
 	except :
 		print('catch error, exit!!')
 
-def wirteDataErrToLog(funcName, data, value, line, tips=""):
+def wirteDataErrToLog(funcName, data, value, line="", tips=""):
 	fileObject = open(logDir, 'a')
 	fileObject.wirte('DataError:\nfunName:%s, data:%s, value:%s, line:%s\ntips:%s'\
 		%(funcName, data, value, line, tips))

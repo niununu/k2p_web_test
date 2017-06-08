@@ -17,7 +17,7 @@ port_forward_data_2 = {
 	'innerPort': '4445',
 	'protocol':'UDP'#tcp, udp, both
 }
-port_forward_data_4 = {
+port_forward_data_3 = {
 	'action' : 'add',#add, del, modify
 	'enable' : '0',
 	'ruleName': '3',
@@ -27,7 +27,7 @@ port_forward_data_4 = {
 	'protocol':'TCP&UDP'#tcp, udp, both
 }
 
-port_forward_data_3 = {
+port_forward_data_4 = {
 	'action' : 'modify',#add, del, modify
 	'enable' : '0',
 	'ruleName': '3',

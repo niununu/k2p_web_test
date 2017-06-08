@@ -4,7 +4,7 @@
 #
 # FILE NAME  :   
 # VERSION    :   1.0
-# DESCRIPTION:   
+# DESCRIPTION:   测试功能选择文件
 #
 # CREATE DATE:   
 #
@@ -19,14 +19,16 @@ from src import *
 from api import *
 import time
 
-
-
 login.main(loginData.login_data_1)
+#portForward.main(portForwardData.port_forward_data_1)
+#time.sleep(4)
+#portForward.main(portForwardData.port_forward_data_2)
+#time.sleep(4)
+#portForward.main(portForwardData.port_forward_data_3)
+#time.sleep(4)
+##parentCtrl.main(parentCtrlData.pareCtrl_data_2)
 
-#portForward.main(portForwardData.port_forward_data_3, portForwardData.new_port_forward_data_1)
-#time.sleep(5)
-#parentCtrl.main(parentCtrlData.pareCtrl_data_1)
-#dmz.main(dmzData.dmz_data_1)
+dmz.main(dmzData.dmz_data_1)
 #upnp.main(upnpData.upnp_data_1)
 #networkset.main(networksetData.networkset_data_1)
 #backupRestore.main(backupRestoreData.backupRestore_data_1)

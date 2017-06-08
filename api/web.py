@@ -16,6 +16,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 import time
 import os
+import log as log
 
 import browser as browser
 networkRestartTime = 40
@@ -28,7 +29,7 @@ def waitandClick(xpath):
 		WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitandClick, TimeoutException, xpath = %s\n' % xpath)
-		wirteWebErrToLog('waitandClick', 'TimeoutException', xpath)
+		log.wirteWebErrToLog('waitandClick', 'TimeoutException', xpath)
 		return False
 
 	driver.find_element_by_xpath(xpath).click()
@@ -39,7 +40,7 @@ def waitandSendkeys(xpath, keys):
 		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitandSendkeys, TimeoutException, xpath = %s\n' % xpath)
-		wirteWebErrToLog('waitandSendkeys', 'TimeoutException', xpath)
+		log.wirteWebErrToLog('waitandSendkeys', 'TimeoutException', xpath)
 		return False
 
 	driver.find_element_by_xpath(xpath).clear()
@@ -86,7 +87,7 @@ def waitforDisappear(xpath):
 		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitforDisappear, TimeoutException, xpath = %s\n' % xpath)
-		wirteWebErrToLog('waitforDisappear', 'TimeoutException', xpath)
+		log.wirteWebErrToLog('waitforDisappear', 'TimeoutException', xpath)
 		return False
 
 	try:
@@ -94,7 +95,7 @@ def waitforDisappear(xpath):
 		WebDriverWait(driver, 20).until_not(lambda driver: process.is_displayed())
 	except NoSuchElementException as e:
 		print('Error:waitforDisappear, NoSuchElementException, xpath = %s\n' % xpath)
-		wirteWebErrToLog('waitforDisappear', 'NoSuchElementException', xpath)
+		log.wirteWebErrToLog('waitforDisappear', 'NoSuchElementException', xpath)
 		return False
 
 #等待页面出现
@@ -103,7 +104,7 @@ def waitforDisplay(xpath):
 		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitforDisplay, TimeoutException, xpath = %s\n' % xpath)
-		wirteWebErrToLog('waitforDisplay', 'TimeoutException', xpath)
+		log.wirteWebErrToLog('waitforDisplay', 'TimeoutException', xpath)
 		return False
 
 	try:
@@ -111,7 +112,7 @@ def waitforDisplay(xpath):
 		WebDriverWait(driver, 10).until(lambda driver: process.is_displayed())
 	except NoSuchElementException as e:
 		print('Error:waitforDisplay, NoSuchElementException, xpath = %s\n' % xpath)
-		wirteWebErrToLog('waitforDisplay', 'NoSuchElementException', xpath)
+		log.wirteWebErrToLog('waitforDisplay', 'NoSuchElementException', xpath)
 		return False
 
 #检查某个元素时候出现
