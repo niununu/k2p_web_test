@@ -5,7 +5,7 @@
 # FILE NAME  :   
 # VERSION    :   1.0
 # DESCRIPTION:   修改管理员密码
-#
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################

@@ -5,7 +5,7 @@
 # FILE NAME  :   web.py
 # VERSION    :   1.0
 # DESCRIPTION:   web页面通用操作接口
-#
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   
 #
 ##############################################################

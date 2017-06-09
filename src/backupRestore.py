@@ -5,7 +5,7 @@
 # FILE NAME  :   
 # VERSION    :   1.0
 # DESCRIPTION:   备份恢复
-#
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################

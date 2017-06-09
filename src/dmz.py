@@ -5,7 +5,7 @@
 # FILE NAME  :   luci.sh
 # VERSION    :   1.0
 # DESCRIPTION:   K2P旧UI升级到新UI时，etc/config/luci文件配置适配
-#
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################

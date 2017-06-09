@@ -5,7 +5,7 @@
 # FILE NAME  :   
 # VERSION    :   1.0
 # DESCRIPTION:   一键体检
-#
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   
 #
 ##############################################################

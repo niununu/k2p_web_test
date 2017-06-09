@@ -5,7 +5,7 @@
 # FILE NAME  :   
 # VERSION    :   1.0
 # DESCRIPTION:   上网设置
-#
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   
 #
 ##############################################################

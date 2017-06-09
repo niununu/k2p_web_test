@@ -1,6 +1,6 @@
 
 login_data_1 = {
-	"login_pwd" : "Admin"
+	"login_pwd" : "admin"
 }
 
 

@@ -6,6 +6,7 @@
 # VERSION    :   1.0
 # DESCRIPTION:   将运行结果写入log
 #
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
