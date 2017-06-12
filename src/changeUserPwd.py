@@ -9,7 +9,7 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import adapter, log
+import adapter, log, configApi
 class changePwdClass(object):
 	"""docstring for changePwdClass"""
 	def __init__(self, arg):
@@ -25,6 +25,10 @@ class changePwdClass(object):
 		adapter.waitandSendkeys('//*[@id="PwdCfm"]', self.pwdNew)
 
 		adapter.waitandClick('//*[@id="SavePwd"]')
+		time.sleep(1)
+		if adapter.elementIsDisplayed('//*[@id="Pwd"']):
+			configApi.cfgSet(loginData, login_data_1, login_pwd, self.pwdNew)
+		
 
 def main(data):
 	log.writeLog(data, 'changeUserPwd', 1)

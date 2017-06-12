@@ -2,10 +2,10 @@
 #!/usr/bin/env python
 ############################################################
 #
-# FILE NAME  :   
+# FILE NAME  :   changeUserPwd.py
 # VERSION    :   1.0
 # DESCRIPTION:   修改管理员密码--覆盖全部测试用例
-#
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
@@ -19,14 +19,13 @@
 '''
 import sys
 sys.path.append('../src')
-sys.path.append('../data')
-sys.path.append('../api')
 from src import changeUserpwd
+sys.path.append('../data')
 from data import changeUserpwdData
-from api import *
 
 usrPwd = 'admin'
 errCode = ['oldPwdErr', 'lenErr', 'charErr', 'matchErr']
+
 def checkData(data):
 	if data['pwdOld'] != usrPwd:
 		log.writeDataErrToLog('checkData', 'pwdOld', data['pwdOld'],"","wrong user password")
@@ -41,8 +40,5 @@ def checkData(data):
 			log.writeDataErrToLog('pwdCheck', 'pwdNew', data['pwdNew'], "", 'char error')
 			return errcode[2]#"charErr"
 
-
-
-
 def main():
-	pass
+	

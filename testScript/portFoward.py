@@ -45,13 +45,16 @@ def delRule():
 	time.sleep(sleepTime)
 	portForward.main(portForwardData.new_port_forward_data_3)
 
-login.main(loginData.login_data_1)
+def main():
+	login.main(loginData.login_data_1)
+	addRule()
+	#time.sleep(5)
+	#modifyRule()
+	#time.sleep(5)
 
-#addRule()
-#time.sleep(5)
-#modifyRule()
-#time.sleep(5)
-delRule()
+if __name__ == '__main__':
+	main()
+
 
 
 
