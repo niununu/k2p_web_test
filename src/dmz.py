@@ -9,28 +9,26 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
 import time
+import adapter, log
 class dmzClass(object):
 	"""docstring for dmzClass"""
 	def __init__(self, arg):
 		self.ip = arg['ip']
 
 	def setDmz(self):
-		web.clickApp()
+		adapter.clickApp()
 		time.sleep(1)
 
-		web.srcollAction('bottom')
-		web.waitandClick('//*[@id="AppList"]/ul[5]/a[1]/li')
-		web.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')
-		web.waitandSendkeys('//*[@id="DmzIp"]', self.ip)
-		web.waitandClick('//*[@id="Save"]')
+		adapter.srcollAction('bottom')
+		adapter.waitandClick('//*[@id="AppList"]/ul[5]/a[1]/li')
+		adapter.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')
+		adapter.waitandSendkeys('//*[@id="DmzIp"]', self.ip)
+		adapter.waitandClick('//*[@id="Save"]')
 
 def main(data):
-	log.wirteLog(data, 'dmz', 1)
+	log.writeLog(data, 'dmz', 1)
 	dmzObj = dmzClass(data)
 
 	dmzObj.setDmz()
-	log.wirteLog(data, 'dmz', 2)
+	log.writeLog(data, 'dmz', 2)

@@ -10,40 +10,38 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
+import adapter
 import time
-import browser as browser
-
-localtime = time.asctime(time.localtime(time.time()))
+localtime = time.asctime( time.localtime(time.time()))
 logDir = '../log/log-%s.txt' % (time.strftime('%Y-%m-%d',time.localtime(time.time())))
 
-def wirteLog(data, moduleName, mode, errName="", xpath=""):
+def writeLog(data, moduleName, mode, errName="", xpath=""):
 	fileObject = open(logDir, 'a')
 	if mode == 1:#moduleBegin
 		fileObject.write('\n%s, %s begin\n'%(localtime, moduleName))
-		if data != "":
-			fileObject.write("Set Data :\n")
-			for key in data:
-				fileObject.write('		%s = %s\n' % (key, data[key]))
+		fileObject.write("Set Data :\n")
+		for key in data:
+			fileObject.write('		%s = %s\n' % (key, data[key]))
 	else:#modulEnd
 		fileObject.write('%s, %s end\n\n'%(localtime, moduleName))
 
-def wirteWebErrToLog(funcName, errName="", xpath=""):
+def writewebErrToLog(funcName, errName="", xpath=""):
 	fileObject = open(logDir, 'a')
-	fileObject.write('WebError:\nfunName:%s, error:%s, xpath:%s, \ntime:%s\n' % (funcName, errName, xpath, localtime))
+	fileObject.write('webError:\nfunName:%s, error:%s, xpath:%s, \ntime:%s\n' % (funcName, errName, xpath, localtime))
 	fileObject.close()
 	try:
-		browser.closeDriver()
+		adapter.closeDriver()
 		os._exit(0)
 	except :
 		print('catch error, exit!!')
 
-def wirteDataErrToLog(funcName, data, value, line="", tips=""):
+def writeDataErrToLog(funcName, data, value, line, tips=""):
 	fileObject = open(logDir, 'a')
-	fileObject.wirte('DataError:\nfunName:%s, data:%s, value:%s, line:%s\ntips:%s'\
+	fileObject.write('DataError:\nfunName:%s, data:%s, value:%s, line:%s\ntips:%s'\
 		%(funcName, data, value, line, tips))
 	fileObject.close()
 	try:
-		browser.closeDriver()
+		adapter.closeDriver()
 		os._exit(0)
 	except :
 		print('catch error, exit!!')

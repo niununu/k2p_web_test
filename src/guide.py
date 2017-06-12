@@ -9,11 +9,9 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
 import login
-
+import sys
+import adapter, log
 sys.path.append('../data')
 import loginData
 import time
@@ -37,47 +35,47 @@ class guideClass(object):
 
 	def guide(self):
 		if (self.setPwd == 'True' ):
-			web.waitandClick('//*[@id="Start"]')
-			web.waitandSendkeys('//*[@id="PwdNew"]', self.login_pwd)
-			web.waitandSendkeys('//*[@id="PwdCfm"]', self.login_pwd)
-			web.waitandClick('//*[@id="Save"]')
+			adapter.waitandClick('//*[@id="Start"]')
+			adapter.waitandSendkeys('//*[@id="PwdNew"]', self.login_pwd)
+			adapter.waitandSendkeys('//*[@id="PwdCfm"]', self.login_pwd)
+			adapter.waitandClick('//*[@id="Save"]')
 			time.sleep(1)
 		else:
 			login.main(loginData.login_data_1)
 
-		#web.waitforDisplay('//*[@id="Pop"]')
-		web.waitforDisappear('//*[@id="Pop"]')
-		web.waitandClick('//*[@id="WanType"]/span')
+		#adapter.waitforDisplay('//*[@id="Pop"]')
+		adapter.waitforDisappear('//*[@id="Pop"]')
+		adapter.waitandClick('//*[@id="WanType"]/span')
 
 		if self.network_mode == 'dhcp':
-			web.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
+			adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
 		elif self.network_mode == 'pppoe':
-			web.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
-			web.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser)
-			web.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd)
+			adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
+			adapter.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser)
+			adapter.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd)
 		elif self.network_mode == 'static':
-			web.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
-			web.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
-			web.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
-			web.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
-			web.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
+			adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
+			adapter.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
+			adapter.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
+			adapter.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
+			adapter.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
 		else :
 			print("please input right mode: dhcp, pppoe, static")
-			log.wirteWebErrToLog('guide', 'input data error')
+			log.writeadapterErrToLog('guide', 'input data error')
 
-		#web.waitandClick('//*[@id="Save"]')
+		#adapter.waitandClick('//*[@id="Save"]')
 
-		web.waitforDisappear('//*[@id="Pop"]')
-		web.waitandSendkeys('//*[@id="Ssid2G"]', self.ssid_24G)
-		web.waitandSendkeys('//*[@id="Pwd2G"]', self.pwd_24G)
-		web.waitandSendkeys('//*[@id="Ssid5G"]', self.ssid_5G)
-		web.waitandSendkeys('//*[@id="Pwd5G"]', self.pwd_5G)
+		adapter.waitforDisappear('//*[@id="Pop"]')
+		adapter.waitandSendkeys('//*[@id="Ssid2G"]', self.ssid_24G)
+		adapter.waitandSendkeys('//*[@id="Pwd2G"]', self.pwd_24G)
+		adapter.waitandSendkeys('//*[@id="Ssid5G"]', self.ssid_5G)
+		adapter.waitandSendkeys('//*[@id="Pwd5G"]', self.pwd_5G)
 
-		web.waitandClick('//*[@id="SaveReboot"]')
+		adapter.waitandClick('//*[@id="SaveReboot"]')
 
 def main(data):
-	log.wirteLog(data, 'guide', 1)
+	log.writeLog(data, 'guide', 1)
 	guideObj = guideClass(data)
-	web.openDriver()
+	adapter.openDriver()
 	guideObj.guide()
-	log.wirteLog(data, 'guide', 2)
+	log.writeLog(data, 'guide', 2)

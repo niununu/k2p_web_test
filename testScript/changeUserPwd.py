@@ -29,16 +29,16 @@ usrPwd = 'admin'
 errCode = ['oldPwdErr', 'lenErr', 'charErr', 'matchErr']
 def checkData(data):
 	if data['pwdOld'] != usrPwd:
-		log.wirteDataErrToLog('checkData', 'pwdOld', data['pwdOld'],"","wrong user password")
+		log.writeDataErrToLog('checkData', 'pwdOld', data['pwdOld'],"","wrong user password")
 		return errcode[0]#"oldPwdErr"
 
 	if len(pwd) > 63 || len(pwd) < 5:
-		log.wirteDataErrToLog('pwdCheck', 'pwdNew', data['pwdNew'], "", "lenth error")
+		log.writeDataErrToLog('pwdCheck', 'pwdNew', data['pwdNew'], "", "lenth error")
 		return errcode[1]#"lenErr"
 
 	for x in xrange(0,len(pwd) - 1):
 		if pwd[x] < 0x20 || pwd[x] > 0x7E:#ASCII表示范围:0x20-0x7E
-			log.wirteDataErrToLog('pwdCheck', 'pwdNew', data['pwdNew'], "", 'char error')
+			log.writeDataErrToLog('pwdCheck', 'pwdNew', data['pwdNew'], "", 'char error')
 			return errcode[2]#"charErr"
 
 

@@ -9,10 +9,7 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
-import web
+import adapter, log
 import time
 
 class upnpClass(object):
@@ -21,19 +18,18 @@ class upnpClass(object):
 		self.enable = arg['enable']
 
 	def upnp(self):
-		web.clickApp()
+		adapter.clickApp()
 		time.sleep(1)
-		web.executeJS("var q = document.getElementById('Content').scrollTop=10000")
-		web.waitandClick('//*[@id="AppList"]/ul[5]/a[2]/li')
+		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.waitandClick('//*[@id="AppList"]/ul[5]/a[2]/li')
 
 		if self.enable == '1':
-			web.alwaysOpenSwitch('//*[@id="UpnpSwitch"]', 'data-value')
+			adapter.alwaysOpenSwitch('//*[@id="UpnpSwitch"]', 'data-value')
 		else :
-			web.alwaysCloseSwitch('//*[@id="UpnpSwitch"]', 'data-value')
-
+			adapter.alwaysCloseSwitch('//*[@id="UpnpSwitch"]', 'data-value')
 
 def main(data):
-	log.wirteLog(data, 'upnp', 1)
+	log.writeLog(data, 'upnp', 1)
 	upnpObj = upnpClass(data)
 	upnpObj.upnp()
-	log.wirteLog(data, 'upnp', 2)
+	log.writeLog(data, 'upnp', 2)

@@ -9,11 +9,7 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
-
-
+import adapter, log
 
 class loginClass(object):
 	"""docstring for login"""
@@ -22,13 +18,12 @@ class loginClass(object):
 		self.login_pwd = arg['login_pwd']
 
 	def login(self):
-		web.waitandSendkeys('//*[@id="Pwd"]', self.login_pwd)
-		web.waitandClick('//*[@id="Save"]')
-
+		adapter.waitandSendkeys('//*[@id="Pwd"]', self.login_pwd)
+		adapter.waitandClick('//*[@id="Save"]')
 
 def main(data):
-	log.wirteLog(data, 'login', 1)
-	browser.openDriver()
+	log.writeLog(data, 'login', 1)
+	adapter.openDriver()
 	test1 = loginClass(data)
 	test1.login()
-	log.wirteLog(data, 'login', 2)
+	log.writeLog(data, 'login', 2)

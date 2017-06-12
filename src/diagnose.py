@@ -9,21 +9,18 @@
 # CREATE DATE:   
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
-
+import adapter,log
 class diagnodeClass(object):
 	"""docstring for diagnodeClass"""
 	def __init__(self, arg):
 		self.arg = arg
 	def diagnose(self):
-		web.clickApp()
-		web.waitandClick('//*[@id="AppList"]/ul[3]/a[1]/li')
-		web.waitandClick('//*[@id="Start"]')
+		adapter.clickApp()
+		adapter.waitandClick('//*[@id="AppList"]/ul[3]/a[1]/li')
+		adapter.waitandClick('//*[@id="Start"]')
 
 def main():
-	log.wirteLog("", 'diagnose', 1)
+	log.writeLog("", 'diagnose', 1)
 	diagnoseObj = diagnodeClass("")
 	diagnoseObj.diagnose()
-	log.wirteLog("", 'diagnose', 2)
+	log.writeLog("", 'diagnose', 2)

@@ -9,10 +9,7 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
-
+import adapter, log
 class changePwdClass(object):
 	"""docstring for changePwdClass"""
 	def __init__(self, arg):
@@ -20,17 +17,17 @@ class changePwdClass(object):
 		self.pwdOld = arg['pwdOld']
 
 	def changeUserPwd(self):
-		web.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
-		web.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]/ul/li[2]')
-		web.waitforDisplay('//*[@id="_Widget"]')
-		web.waitandSendkeys('//*[@id="PwdOld"]', self.pwdOld)
-		web.waitandSendkeys('//*[@id="PwdNew"]', self.pwdNew)
-		web.waitandSendkeys('//*[@id="PwdCfm"]', self.pwdNew)
+		adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
+		adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]/ul/li[3]')
+		adapter.waitforDisplay('//*[@id="_Widget"]')
+		adapter.waitandSendkeys('//*[@id="PwdOld"]', self.pwdOld)
+		adapter.waitandSendkeys('//*[@id="PwdNew"]', self.pwdNew)
+		adapter.waitandSendkeys('//*[@id="PwdCfm"]', self.pwdNew)
 
-		web.waitandClick('//*[@id="SavePwd"]')
+		adapter.waitandClick('//*[@id="SavePwd"]')
 
 def main(data):
-	log.wirteLog(data, 'changeUserPwd', 1)
+	log.writeLog(data, 'changeUserPwd', 1)
 	changePwdObj = changePwdClass(data)
 	changePwdObj.changeUserPwd()
-	log.wirteLog(data, 'changeUserPwd', 2)
+	log.writeLog(data, 'changeUserPwd', 2)

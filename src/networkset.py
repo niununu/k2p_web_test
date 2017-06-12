@@ -9,11 +9,8 @@
 # CREATE DATE:   
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
 import time
-
+import adapter, log
 class networkSetClass(object):
 	def __init__(self, arg):
 		self.dns1 = arg['dns1']
@@ -28,11 +25,11 @@ class networkSetClass(object):
 		self.moreSet = arg['moreSet']
 
 	def networkSet(self):
-		web.clickApp()
-		web.executeJS("var q = document.getElementById('Content').scrollTop=0")
+		adapter.clickApp()
+		adapter.executeJS("var q = document.getElementById('Content').scrollTop=0")
 
-		web.waitandClick('//*[@id="AppList"]/ul[1]/a[2]/li')
-		web.waitandClick('//*[@id="WanType"]')
+		adapter.waitandClick('//*[@id="AppList"]/ul[1]/a[2]/li')
+		adapter.waitandClick('//*[@id="WanType"]')
 
 		if self.mode == 'dhcp':#dhcp
 			self.networkSet_dhcp()
@@ -41,7 +38,7 @@ class networkSetClass(object):
 		elif self.mode == 'static':#static
 			self.networkSet_static()
 		else:
-			web.wirteWebErrToLog('networkSet', 'input data error')
+			adapter.writeadapterErrToLog('networkSet', 'input data error')
 			print("please input right mode: dhcp, pppoe, static")
 			return
 
@@ -51,41 +48,41 @@ class networkSetClass(object):
 			else:
 				self.SeniorSet()
 
-		web.executeJS("var q = document.getElementById('Content').scrollTop=10000")
-		web.waitandClick('//*[@id="Save"]')
+		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.waitandClick('//*[@id="Save"]')
 
 	def networkSet_dhcp(self):
-		web.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
+		adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
 
 	def networkSet_pppoe(self):
-		web.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
-		web.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser )
-		web.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd )
+		adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
+		adapter.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser )
+		adapter.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd )
 
 	def networkSet_static(self):
-		web.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
-		web.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
-		web.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
-		web.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
-		web.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
-		web.waitandSendkeys('//*[@id="SecDns"]', self.dns2)
+		adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
+		adapter.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
+		adapter.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
+		adapter.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
+		adapter.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
+		adapter.waitandSendkeys('//*[@id="SecDns"]', self.dns2)
 
 	def SeniorSet(self, flag = True):
-		web.executeJS("var q = document.getElementById('Content').scrollTop=10000")
-		web.waitandClick('//*[@id="SeniorSet"]')
-		web.waitandSendkeys('//*[@id="Mtu"]', self.mtu)
-		web.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.waitandClick('//*[@id="SeniorSet"]')
+		adapter.waitandSendkeys('//*[@id="Mtu"]', self.mtu)
+		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
 
 		if flag:
-			web.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')
-			web.executeJS("var q = document.getElementById('Content').scrollTop=10000")
-			web.waitandSendkeys('//*[@id="SeniorPrimDns"]', self.dns1)
-			web.waitandSendkeys('//*[@id="SeniorSecDns"]', self.dns2)
+			adapter.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')
+			adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+			adapter.waitandSendkeys('//*[@id="SeniorPrimDns"]', self.dns1)
+			adapter.waitandSendkeys('//*[@id="SeniorSecDns"]', self.dns2)
 
 def main(data):
-	log.wirteLog(data, 'networkSet', 1)
+	log.writeLog(data, 'networkSet', 1)
 	data_1 = networkSetClass(data)
 	data_1.networkSet()
-	log.wirteLog(data, 'networkSet', 2)
+	log.writeLog(data, 'networkSet', 2)
 
 

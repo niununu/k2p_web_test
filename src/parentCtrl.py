@@ -9,10 +9,7 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import sys 
-sys.path.append('../api')
-from api import *
-import web
+import adapter, log
 
 class parentCtrlClass(object):
 	"""docstring for parentCtrlClass"""
@@ -20,11 +17,11 @@ class parentCtrlClass(object):
 		self.action = arg['action']
 
 	def parentCtrl(self):
-		#web.waitandClick
-		web.clickApp()
-		web.waitandClick('//*[@id="AppList"]/ul[1]/a[4]/li')
-		web.alwaysOpenSwitch('//*[@id="SwitchParent"]', 'data-value')
-		web.waitforDisappear('//*[@id="Pop"]')
+		#adapter.waitandClick
+		adapter.clickApp()
+		adapter.waitandClick('//*[@id="AppList"]/ul[1]/a[4]/li')
+		adapter.alwaysOpenSwitch('//*[@id="SwitchParent"]', 'data-value')
+		adapter.waitforDisappear('//*[@id="Pop"]')
 		if self.action == 'add':
 			self.addRule()
 		elif self.action == 'modify':
@@ -35,14 +32,14 @@ class parentCtrlClass(object):
 			print("please input right action: add, modify, delete")
 
 	def addRule(self):
-		web.waitandSendkeys('//*[@id="RuleName"]', '123')
+		adapter.waitandSendkeys('//*[@id="RuleName"]', '123')
 	def delRule(self):
 		pass
 	def modifyRule(self):
 		pass
 
 def main(data):
-	log.wirteLog(data, 'parentCtrl', 1)
+	log.writeLog(data, 'parentCtrl', 1)
 	parentCtrlObj = parentCtrlClass(data)
 	parentCtrlObj.parentCtrl()
-	log.wirteLog(data, 'parentCtrl', 2)
+	log.writeLog(data, 'parentCtrl', 2)
