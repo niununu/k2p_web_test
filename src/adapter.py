@@ -9,7 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 
-driver = webdriver.Chrome()
+#driver = webdriver.Chrome()
+driver = webdriver.Firefox()
 networkRestartTime = 40
 rebootTime = 70
 
