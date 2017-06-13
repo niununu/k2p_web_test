@@ -10,11 +10,18 @@
 #
 ##############################################################
 import adapter, log, configApi
+import time, sys
+sys.path.append('../data')
+import loginData
+
 class changePwdClass(object):
 	"""docstring for changePwdClass"""
 	def __init__(self, arg):
 		self.pwdNew = arg['pwdNew']
-		self.pwdOld = arg['pwdOld']
+		if arg['pwdOld'] != "":
+			self.pwdOld = arg['pwdOld']
+		else:
+			self.pwdOld = loginData.login_data['login_pwd']
 
 	def changeUserPwd(self):
 		adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
@@ -26,9 +33,10 @@ class changePwdClass(object):
 
 		adapter.waitandClick('//*[@id="SavePwd"]')
 		time.sleep(1)
-		if adapter.elementIsDisplayed('//*[@id="Pwd"']):
-			configApi.cfgSet(loginData, login_data_1, login_pwd, self.pwdNew)
-		
+		if adapter.elementIsDisplayed('//*[@id="Pwd"]'):
+			print('11111')
+			configApi.cfgSet('loginData', 'login_data', 'login_pwd', self.pwdNew)
+
 
 def main(data):
 	log.writeLog(data, 'changeUserPwd', 1)

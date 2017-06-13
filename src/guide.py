@@ -11,7 +11,7 @@
 ##############################################################
 import login
 import sys
-import adapter, log
+import adapter, log, configApi
 sys.path.append('../data')
 import loginData
 import time
@@ -40,8 +40,9 @@ class guideClass(object):
 			adapter.waitandSendkeys('//*[@id="PwdCfm"]', self.login_pwd)
 			adapter.waitandClick('//*[@id="Save"]')
 			time.sleep(1)
+			configApi.cfgSet('loginData', 'login_data', 'login_pwd', self.login_pwd)
 		else:
-			login.main(loginData.login_data_1)
+			login.main(loginData.login_data)
 
 		#adapter.waitforDisplay('//*[@id="Pop"]')
 		adapter.waitforDisappear('//*[@id="Pop"]')

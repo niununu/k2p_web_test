@@ -28,4 +28,5 @@ def cfgSet(fileName, section, key, value):
 		file_object.write(cfg)
 
 if __name__ == '__main__':
-	cfgSet('loginData', 'login_data_1', 'login_pwd_1', 'testtest')
+	
+	pass
