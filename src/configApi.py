@@ -1,24 +1,31 @@
 def cfgSet(fileName, section, key, value):
-	pass
 	path = "../data/%s.py"%fileName
-	#读取所有内容
-	#file_object = open(path)
-	with open(path) as file_object
-	sectionFindFlag = False
-	while True:
-		lines = file_object.readline()
-		if not lines:
-			break
-		if sectionFindFlag == False:
-			if lines.find(section) != -1:
-				sectionFindFlag = True
+	cfg = ""
+	strOld = ""
+	strNew = ""
+	with open(path, 'r') as file_object:
+		cfg = file_object.read()
+		site1 = cfg.find(section)
+		if site1 == -1:
+			strNew = "%s{\n\t\'%s\' : \'%s\'\n}"%(section, key, value)
+			cfg = cfg + "\n\n"+ strNew
+			print cfg
 		else:
-			if lines.find(key) != -1:
-				#删除一行
-				strInput = ('%s : %s') % (key, value)
-				if lines.find(',') != -1:
-					strInput = ('%s : %s,') % (key, value)
-				#插入一行
+			end1 = cfg.find('}', site1)
+			site2 = cfg.find(key, site1, end1)
+			if site2 == -1:
+				strOld = cfg[site1 : end1 + 1]
+				strNew = "%s,\n\t\'%s\' : \'%s\'\n}"%(cfg[site1 : end1 - 1], key, value)
+			else:
+				site3 = cfg.find('\n', site2)
+				strOld = cfg[site1: site3]
+				strNew = "%s\'%s\' : \'%s\'"%(cfg[site1: site2 - 1],key, value)
+				if cfg[site3 - 1] == ',':
+					strNew = strNew + ','
+			cfg = cfg.replace(strOld, strNew)
 
+	with open(path, 'w') as file_object:
+		file_object.write(cfg)
 
-
+if __name__ == '__main__':
+	cfgSet('loginData', 'login_data_1', 'login_pwd_1', 'testtest')
