@@ -1,6 +1,0 @@
-
-Wed Jun  7 16:52:27 2017, login begin
-Set Data :
-		login_pwd = admin
-Wed Jun  7 16:52:27 2017, login end
-
