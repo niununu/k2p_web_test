@@ -1,3 +1,14 @@
+# -*- coding: UTF-8 -*-
+#!/usr/bin/env python
+############################################################
+#
+# FILE NAME  :   configApi.py
+# VERSION    :   1.0
+# DESCRIPTION:   data目录下数据修改函数
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
+# CREATE DATE:   04/06/2017
+#
+##############################################################
 def cfgSet(fileName, section, key, value):
 	path = "../data/%s.py"%fileName
 	cfg = ""

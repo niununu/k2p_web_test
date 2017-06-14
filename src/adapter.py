@@ -45,9 +45,6 @@ def clickApp():
 	waitandClick('//*[@id="Con"]/div[1]/ul[1]/a[4]/li')
 	waitforDisplay('//*[@id="Content"]')
 
-def executeJS(js):
-	driver.execute_script(js)
-
 def srcollAction(site):
 	scrollTop = '0'
 	if site == 'top':

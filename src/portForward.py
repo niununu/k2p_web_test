@@ -58,9 +58,7 @@ class portForwardClass(object):
 		else :
 			arr = ["", self.ruleName, self.serverIP, self.outerPort, self.innerPort, self.protocol]
 			row = adapter.getElementInTable('//*[@id="PortfwdTab"]','//*[@id="PortfwdTab"]/tbody', arr)
-			if row == 0:
-				print('no such line~~~')
-			else:
+			if row != 0:
 				if self.action == 'del':
 					xpath = '//*[@id="PortfwdTab"]/tbody/tr[%d]/td[6]/span[2]' % row
 					adapter.waitandClick(xpath)

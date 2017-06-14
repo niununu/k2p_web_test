@@ -15,7 +15,7 @@ import time
 localtime = time.asctime( time.localtime(time.time()))
 logDir = '../log/log-%s.txt' % (time.strftime('%Y-%m-%d',time.localtime(time.time())))
 
-def writeLog(data, moduleName, mode, errName="", xpath=""):
+def writeLog(data, moduleName, mode):
 	with open(logDir, 'a') as fileObject:
 		if mode == 1:#moduleBegin
 			fileObject.write('\n%s, %s begin\n'%(localtime, moduleName))
