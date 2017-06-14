@@ -16,7 +16,6 @@ import time
 class portForwardClass(object):
 	"""docstring for portForwardClass"""
 	def __init__(self, arg):
-		#super(portForwardClass, self).__init__()
 		self.enable = arg['enable']
 		self.ruleName = arg['ruleName']
 		self.serverIP = arg['serverIP']

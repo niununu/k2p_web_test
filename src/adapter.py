@@ -117,8 +117,8 @@ def elementIsDisplayed(xpath):
 		return False
 	return True
 
-def getElementInTable(tableXpath, baseXpath, arrData,):
-	table = driver.find_element_by_xpath('//*[@id="PortfwdTab"]')
+def getElementInTable(tableXpath, baseXpath, arrData):
+	table = driver.find_element_by_xpath(tableXpath)
 	#table的总行数，包含标题
 	table_rows = len(table.find_elements_by_tag_name('tr'))
 	#tabler的总列数
@@ -134,6 +134,9 @@ def getElementInTable(tableXpath, baseXpath, arrData,):
 				break
 		if flag == True:
 			return row
+	log.writeInfo('no such line:')
+	for key in arrData:
+		log.writeInfo('\t%s = %s\n' % (key, data[key]))
 	return 0
 
 def getText(xpath):
