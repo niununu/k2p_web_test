@@ -8,9 +8,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
-
-#driver = webdriver.Chrome()
-driver = webdriver.Firefox()
+import log
+driver = webdriver.Chrome()
+#driver = webdriver.Firefox()
 networkRestartTime = 40
 rebootTime = 70
 
@@ -23,7 +23,7 @@ def waitandClick(xpath):
 		WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitandClick, TimeoutException, xpath = %s\n' % xpath)
-		writewebErrToLog('waitandClick', 'TimeoutException', xpath)
+		log.writewebErrToLog('waitandClick', 'TimeoutException', xpath)
 		return False
 
 	driver.find_element_by_xpath(xpath).click()
@@ -33,7 +33,7 @@ def waitandSendkeys(xpath, keys):
 		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitandSendkeys, TimeoutException, xpath = %s\n' % xpath)
-		writewebErrToLog('waitandSendkeys', 'TimeoutException', xpath)
+		log.writewebErrToLog('waitandSendkeys', 'TimeoutException', xpath)
 		return False
 
 	driver.find_element_by_xpath(xpath).clear()
@@ -54,7 +54,6 @@ def srcollAction(site):
 		scrollTop = '0'
 	elif site == 'bottom':
 		scrollTop = '10000'
-	#web.executeJS("var q = document.getElementById('Content').scrollTop=10000")
 	driver.execute_script("var q = document.getElementById('Content').scrollTop=%s" % scrollTop)
 
 def alwaysOpenSwitch(xpath, switchValue='data-value'):
@@ -84,7 +83,7 @@ def waitforDisappear(xpath):
 		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitforDisappear, TimeoutException, xpath = %s\n' % xpath)
-		writewebErrToLog('waitforDisappear', 'TimeoutException', xpath)
+		log.writewebErrToLog('waitforDisappear', 'TimeoutException', xpath)
 		return False
 
 	try:
@@ -92,7 +91,7 @@ def waitforDisappear(xpath):
 		WebDriverWait(driver, 20).until_not(lambda driver: process.is_displayed())
 	except NoSuchElementException as e:
 		print('Error:waitforDisappear, NoSuchElementException, xpath = %s\n' % xpath)
-		writewebErrToLog('waitforDisappear', 'NoSuchElementException', xpath)
+		log.writewebErrToLog('waitforDisappear', 'NoSuchElementException', xpath)
 		return False
 
 def waitforDisplay(xpath):
@@ -100,7 +99,7 @@ def waitforDisplay(xpath):
 		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitforDisplay, TimeoutException, xpath = %s\n' % xpath)
-		writewebErrToLog('waitforDisplay', 'TimeoutException', xpath)
+		log.writewebErrToLog('waitforDisplay', 'TimeoutException', xpath)
 		return False
 
 	try:
@@ -108,7 +107,7 @@ def waitforDisplay(xpath):
 		WebDriverWait(driver, 10).until(lambda driver: process.is_displayed())
 	except NoSuchElementException as e:
 		print('Error:waitforDisplay, NoSuchElementException, xpath = %s\n' % xpath)
-		writewebErrToLog('waitforDisplay', 'NoSuchElementException', xpath)
+		log.writewebErrToLog('waitforDisplay', 'NoSuchElementException', xpath)
 		return False
 
 def elementIsDisplayed(xpath):
@@ -136,6 +135,13 @@ def getElementInTable(tableXpath, baseXpath, arrData,):
 		if flag == True:
 			return row
 	return 0
+
+def getText(xpath):
+	if not elementIsDisplayed(xpath):
+		return False
+	else:
+		return driver.find_element_by_xpath(xpath).text
+
 
 
 

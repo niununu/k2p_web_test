@@ -18,7 +18,7 @@ class changePwdClass(object):
 	"""docstring for changePwdClass"""
 	def __init__(self, arg):
 		self.pwdNew = arg['pwdNew']
-		if arg['pwdOld'] != "":
+		if arg['pwdOld'] != "*":
 			self.pwdOld = arg['pwdOld']
 		else:
 			self.pwdOld = loginData.login_data['login_pwd']
@@ -34,9 +34,7 @@ class changePwdClass(object):
 		adapter.waitandClick('//*[@id="SavePwd"]')
 		time.sleep(1)
 		if adapter.elementIsDisplayed('//*[@id="Pwd"]'):
-			print('11111')
 			configApi.cfgSet('loginData', 'login_data', 'login_pwd', self.pwdNew)
-
 
 def main(data):
 	log.writeLog(data, 'changeUserPwd', 1)

@@ -17,28 +17,106 @@
 |新管理员密码	|是 		|否 		|字符串	|长度限制:5-63; 字符集:英文字符集; |
 |确认管理员密码|是 	|否 		|字符串	|需要与新管理员密码相同				|
 '''
-import sys
-sys.path.append('../src')
-from src import changeUserpwd
-sys.path.append('../data')
-from data import changeUserpwdData
+import sys, time
+sys.path.append('../../k2p_web_test')
+from src import *
+from data import *
+reload(sys)
+sys.setdefaultencoding('utf-8') 
 
-usrPwd = 'admin'
-errCode = ['oldPwdErr', 'lenErr', 'charErr', 'matchErr']
+errcode = ['oldPwdErr', 'lenErr', 'charErr', 'matchErr', 'pwdSameErr',\
+	'oldPwdBlankErr', 'newPwdBlankErr']
+errTips = {
+	'oldPwdErr' :'原密码错误',
+	'lenErr' : '5~63',
+	'charErr' : "非法字符",
+	'matchErr' : '两次密码输入不一致',
+	'pwdSameErr' : '密码相同',
+	'oldPwdBlankErr' : '输入原密码',
+	'newPwdBlankErr' : '输入新密码'
+}
 
-def checkData(data):
-	if data['pwdOld'] != usrPwd:
-		log.writeDataErrToLog('checkData', 'pwdOld', data['pwdOld'],"","wrong user password")
-		return errcode[0]#"oldPwdErr"
+def checkData(data):#检查顺序跟页面顺序相同
+	if data['pwdOld'] == "*" :
+		pwd = loginData.login_data['login_pwd']
+	else:
+		pwd = data['pwdOld']
 
-	if len(pwd) > 63 || len(pwd) < 5:
-		log.writeDataErrToLog('pwdCheck', 'pwdNew', data['pwdNew'], "", "lenth error")
-		return errcode[1]#"lenErr"
+	#'oldPwdBlankErr'
+	if data['pwdOld'] == "":
+		log.writeInfo('Old password blank error case')
+		return errcode[5]
 
-	for x in xrange(0,len(pwd) - 1):
-		if pwd[x] < 0x20 || pwd[x] > 0x7E:#ASCII表示范围:0x20-0x7E
-			log.writeDataErrToLog('pwdCheck', 'pwdNew', data['pwdNew'], "", 'char error')
-			return errcode[2]#"charErr"
+	#newPwdBlankErr
+	if data['pwdNew'] == "":
+		log.writeInfo('New password blank error case')
+		return errcode[6]
 
-def main():
-	
+	#charErr
+	strTmp = data['pwdNew']
+	for x in xrange(0,len(data['pwdNew'])):
+		if ord(strTmp[x]) < 33 or ord(strTmp[x]) > 127:#ASCII表示范围:32-127
+			log.writeInfo('New password char error case:%s' % data['pwdNew'])
+			return errcode[2]
+
+	#lenErr
+	if len(data['pwdNew']) > 63 or len(data['pwdNew']) < 5:
+		log.writeInfo('New password len error case:%s' % data['pwdNew'])
+		return errcode[1]
+
+	#oldPwdErr
+	if pwd != loginData.login_data['login_pwd']:
+		log.writeInfo('Password wrong error case: %s'%data['pwdOld'])
+		return errcode[0]
+
+	if data['pwdNew'] == pwd:
+		log.writeInfo('Same password error case:%s' % data['pwdNew'])
+		return errcode[4]
+	#pwdSameErr
+	log.writeInfo('No error in data')
+	return 'none'
+
+
+def matchErrFun():
+	log.writeInfo('new password did not match confirm password error case\n')
+	adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
+	adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]/ul/li[3]')
+	adapter.waitforDisplay('//*[@id="_Widget"]')
+	adapter.waitandSendkeys('//*[@id="PwdOld"]', loginData.login_data['login_pwd'])
+	adapter.waitandSendkeys('//*[@id="PwdNew"]', '12345678')
+	adapter.waitandSendkeys('//*[@id="PwdCfm"]', 'gdkagkd')
+	adapter.waitandClick('//*[@id="SavePwd"]')
+
+def checkResponse(error):
+	if error == 'none':
+		return
+	webText = adapter.getText('//*[@id="PwdTip"]')
+	webText = webText.decode('UTF-8')
+	print(webText)
+	if webText == False:
+		log.writeInfo('###Error: no tips on web!')
+	else:
+		if webText.find(errTips[error]) == -1:
+			log.writeInfo('###Wrong tips on web : %s\n\n' % webText)
+		else:
+			log.writeInfo("Tips on web:%s\n\n"%webText)
+	adapter.waitandClick('//*[@id="ModifyPwd"]/i')
+	time.sleep(1)
+
+def unitTest():
+	login.main(loginData.login_data)
+
+	data = changeUserPwdData.data_list_1
+	for x in xrange(0,len(data)):
+		error = checkData(data[x])
+		changeUserPwd.main(data[x])
+		checkResponse(error)
+	matchErrFun()
+	checkResponse(errcode[3])
+
+	adapter.closeDriver()
+
+if __name__ == '__main__':
+	unitTest()
+
+
