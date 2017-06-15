@@ -39,5 +39,4 @@ def cfgSet(fileName, section, key, value):
 		file_object.write(cfg)
 
 if __name__ == '__main__':
-	
 	pass
