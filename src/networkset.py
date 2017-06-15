@@ -26,7 +26,7 @@ class networkSetClass(object):
 
 	def networkSet(self):
 		adapter.clickApp()
-		adapter.executeJS("var q = document.getElementById('Content').scrollTop=0")
+		adapter.srcollAction('top')
 
 		adapter.waitandClick('//*[@id="AppList"]/ul[1]/a[2]/li')
 		adapter.waitandClick('//*[@id="WanType"]')
@@ -48,7 +48,7 @@ class networkSetClass(object):
 			else:
 				self.SeniorSet()
 
-		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.srcollAction('bottom')
 		adapter.waitandClick('//*[@id="Save"]')
 
 	def networkSet_dhcp(self):
@@ -68,14 +68,14 @@ class networkSetClass(object):
 		adapter.waitandSendkeys('//*[@id="SecDns"]', self.dns2)
 
 	def SeniorSet(self, flag = True):
-		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.srcollAction('bottom')
 		adapter.waitandClick('//*[@id="SeniorSet"]')
 		adapter.waitandSendkeys('//*[@id="Mtu"]', self.mtu)
-		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.srcollAction('bottom')
 
 		if flag:
 			adapter.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')
-			adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+			adapter.srcollAction('bottom')
 			adapter.waitandSendkeys('//*[@id="SeniorPrimDns"]', self.dns1)
 			adapter.waitandSendkeys('//*[@id="SeniorSecDns"]', self.dns2)
 

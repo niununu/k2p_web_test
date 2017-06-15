@@ -71,11 +71,11 @@ class portForwardClass(object):
 					'please input right action: add, del, modify' )
 
 def main(data, newData=""):
-	log.writeLog(data, 'portForward', 1)
+	log.writeLog(data, ('portForward-%s'%data['action']), 1)
 	portForwardObj = portForwardClass(data)
 	portForwardObj.portForward()
 	if newData != "":
-		log.writeLog(newData, 'portForward-modify', 1)
+		log.writeLog(newData, 'newData:', 1)
 		newData['action'] = 'add'
 		newData['enable'] = '1'
 		portForwardObj = portForwardClass(newData)

@@ -8,3 +8,7 @@
 testScript/main.py
 
 src/test.py
+src/geckodriver.log
+testScript/geckodriver.log
+src/test.py
+src/test.py

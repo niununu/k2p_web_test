@@ -44,6 +44,7 @@ def clickApp():
 	waitforDisplay('//*[@id="Con"]/div[1]/ul[1]/a[4]/li')
 	waitandClick('//*[@id="Con"]/div[1]/ul[1]/a[4]/li')
 	waitforDisplay('//*[@id="Content"]')
+	time.sleep(1)
 
 def srcollAction(site):
 	scrollTop = '0'
@@ -70,6 +71,7 @@ def closeDriver():
 	time.sleep(1)
 	driver.quit()
 	os.system('killall chromedriver')
+	os.system('killall geckodriver')
 
 def refresh():
 	driver.refresh()

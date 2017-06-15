@@ -19,8 +19,7 @@ class upnpClass(object):
 
 	def upnp(self):
 		adapter.clickApp()
-		time.sleep(1)
-		adapter.executeJS("var q = document.getElementById('Content').scrollTop=10000")
+		adapter.srcollAction('bottom')
 		adapter.waitandClick('//*[@id="AppList"]/ul[5]/a[2]/li')
 
 		if self.enable == '1':
