@@ -1,5 +1,7 @@
+# -*- coding: UTF-8 -*-
+#!/usr/bin/env python
 guide_data_1 = {
-	'setPwd' : 'False',
+	'setPwd' : 'True',#True,设置密码
 	'login_pwd': 'admin',
 	'ssid_24G': '@PHICOMM_A9_uill',
 	'pwd_24G': '12345678',

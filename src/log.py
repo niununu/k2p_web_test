@@ -14,6 +14,7 @@ import adapter
 import time
 localtime = time.asctime( time.localtime(time.time()))
 logDir = '../log/log-%s.txt' % (time.strftime('%Y-%m-%d',time.localtime(time.time())))
+unitTestLogDir = '../log/unitTest-%s.md'% (time.strftime('%Y-%m-%d',time.localtime(time.time())))
 
 def writeLog(data, moduleName, mode):
 	with open(logDir, 'a') as fileObject:
@@ -28,7 +29,8 @@ def writeLog(data, moduleName, mode):
 def writewebErrToLog(funcName, errName="", xpath=""):
 	with open(logDir, 'a') as fileObject:
 		fileObject = open(logDir, 'a')
-		fileObject.write('###webError:\nfunName:%s, error:%s, xpath:%s, \ntime:%s\n' % (funcName, errName, xpath, localtime))
+		fileObject.write('###webError:\nfunName:%s, error:%s, xpath:%s, \ntime:%s\n' 
+			% (funcName, errName, xpath, localtime))
 	try:
 		adapter.closeDriver()
 		os._exit(0)
@@ -37,7 +39,7 @@ def writewebErrToLog(funcName, errName="", xpath=""):
 
 def writeDataErrToLog(funcName, data, value, line, tips=""):
 	with open(logDir, 'a') as fileObject:
-		fileObject.write('###DataError:\nfunName:%s, data:%s, value:%s, line:%s\ntips:%s'\
+		fileObject.write('###DataError:\nfunName:%s, data:%s, value:%s, line:%s\ntips:%s'
 			%(funcName, data, value, line, tips))
 	try:
 		adapter.closeDriver()
@@ -48,3 +50,16 @@ def writeDataErrToLog(funcName, data, value, line, tips=""):
 def writeInfo(info):
 	with open(logDir, 'a') as fileObject:
 		fileObject.write(info)
+
+def unitTestLog(title):
+	strw = '#Unit Test:%s\n\n##Start Time:%s\n\n'%(title, localtime)
+	strw = strw + '| TestCase%s| Status%s|\n| %s | %s |\n'%('\t'*4, '\t'*4, '-'*(9*4), '-'*(9*4))#数字实验打印效果得出
+	with open(unitTestLogDir, 'a') as fileObject:
+		fileObject.write(strw)
+
+def instertLog(caseName, status):
+	strw = '| %s\t\t\t\t\t | %s\t\t\t\t\t |\n'%(caseName, status)
+	with open(unitTestLogDir, 'a') as fileObject:
+		fileObject.write(strw)
+
+

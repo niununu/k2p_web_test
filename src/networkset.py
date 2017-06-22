@@ -13,16 +13,16 @@ import time
 import adapter, log
 class networkSetClass(object):
 	def __init__(self, arg):
-		self.dns1 = arg['dns1']
-		self.dns2 = arg['dns2']
-		self.mtu = arg['mtu']
-		self.pppoePwd = arg['pppoePwd']
-		self.pppoeUser = arg['pppoeUser']
-		self.ip = arg['ip']
-		self.subMask = arg['subMask']
-		self.gateway = arg['gateway']
-		self.mode = arg['mode']
-		self.moreSet = arg['moreSet']
+		self.dns1 = arg.get('dns1', '')
+		self.dns2 = arg.get('dns2', '')
+		self.mtu = arg.get('mtu', '')
+		self.pppoePwd = arg.get('pppoePwd', '')
+		self.pppoeUser = arg.get('pppoeUser', '')
+		self.ip = arg.get('ip', '')
+		self.subMask = arg.get('subMask', '')
+		self.gateway = arg.get('gateway', '')
+		self.mode = arg.get('mode', '')
+		self.moreSet = arg.get('moreSet', '')
 
 	def networkSet(self):
 		adapter.clickApp()

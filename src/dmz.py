@@ -14,12 +14,10 @@ import adapter, log
 class dmzClass(object):
 	"""docstring for dmzClass"""
 	def __init__(self, arg):
-		self.ip = arg['ip']
+		self.ip = arg.get('ip', '')
 
 	def setDmz(self):
 		adapter.clickApp()
-		time.sleep(1)
-
 		adapter.srcollAction('bottom')
 		adapter.waitandClick('//*[@id="AppList"]/ul[5]/a[1]/li')
 		adapter.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')

@@ -18,6 +18,8 @@
 |确认管理员密码|是 	|否 		|字符串	|需要与新管理员密码相同				|
 '''
 import sys, time
+import unittest
+import HtmlTestRunner
 sys.path.append('../../k2p_web_test')
 from src import *
 from data import *
@@ -28,12 +30,12 @@ errcode = ['oldPwdErr', 'lenErr', 'charErr', 'matchErr', 'pwdSameErr',\
 	'oldPwdBlankErr', 'newPwdBlankErr']
 errTips = {
 	'oldPwdErr' :'原密码错误',
-	'lenErr' : '5~63',
-	'charErr' : "非法字符",
+	'lenErr' : '新密码长度应为5~63位',
+	'charErr' : "新密码包含非法字符",
 	'matchErr' : '两次密码输入不一致',
-	'pwdSameErr' : '密码相同',
-	'oldPwdBlankErr' : '输入原密码',
-	'newPwdBlankErr' : '输入新密码'
+	'pwdSameErr' : '新密码与原密码相同',
+	'oldPwdBlankErr' : '请输入原密码',
+	'newPwdBlankErr' : '请输入新密码'
 }
 
 def checkData(data):#检查顺序跟页面顺序相同
@@ -66,7 +68,7 @@ def checkData(data):#检查顺序跟页面顺序相同
 
 	#oldPwdErr
 	if pwd != loginData.login_data['login_pwd']:
-		log.writeInfo('Password wrong error case: %s'%data['pwdOld'])
+		log.writeInfo('Password wrong error case: %s'% data['pwdOld'])
 		return errcode[0]
 
 	if data['pwdNew'] == pwd:
@@ -91,21 +93,26 @@ def checkResponse(error):
 	if error == 'none':
 		return
 	webText = adapter.getText('//*[@id="PwdTip"]')
-	webText = webText.decode('UTF-8')
-	print(webText)
+
 	if webText == False:
 		log.writeInfo('###Error: no tips on web!')
+		pass
 	else:
+		webText = webText.decode('UTF-8')
 		if webText.find(errTips[error]) == -1:
 			log.writeInfo('###Wrong tips on web : %s\n\n' % webText)
+			log.instertLog(errTips[error], 'Fail')
 		else:
 			log.writeInfo("Tips on web:%s\n\n"%webText)
+			log.instertLog(errTips[error], 'Pass')
+
 	adapter.waitandClick('//*[@id="ModifyPwd"]/i')
 	time.sleep(1)
+	return webText
 
 def unitTest():
 	login.main(loginData.login_data)
-
+	log.unitTestLog('修改管理员密码')
 	data = changeUserPwdData.data_list_1
 	for x in xrange(0,len(data)):
 		error = checkData(data[x])
@@ -116,7 +123,9 @@ def unitTest():
 
 	adapter.closeDriver()
 
+
 if __name__ == '__main__':
+	#unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='cal_report',report_title='修改管理员密码试报告'))
 	unitTest()
 
 

@@ -15,14 +15,14 @@ import time
 
 class portForwardClass(object):
 	"""docstring for portForwardClass"""
-	def __init__(self, arg):
-		self.enable = arg['enable']
-		self.ruleName = arg['ruleName']
-		self.serverIP = arg['serverIP']
-		self.outerPort = arg['outerPort']
-		self.innerPort = arg['innerPort']
-		self.protocol = arg['protocol']
-		self.action = arg['action']
+	def __init__(self, arg):·
+		self.enable = arg.get('enable', '1')
+		self.ruleName = arg.get('ruleName', '')
+		self.serverIP = arg.get('serverIP', '')
+		self.outerPort = arg.get('outerPort', '')
+		self.innerPort = arg.get('innerPort', '')
+		self.protocol = arg.get('protocol', '')
+		self.action = arg.get('action', '')
 
 	def portForward(self):
 		adapter.clickApp()
@@ -33,6 +33,7 @@ class portForwardClass(object):
 		else :
 			adapter.alwaysOpenSwitch('//*[@id="SwitchFwd"]')
 			self.actionFun()
+		time.sleep(1)
 
 	def actionFun(self):
 		if self.action == 'add':
@@ -67,7 +68,7 @@ class portForwardClass(object):
 					adapter.waitandClick(xpath)
 				else:
 					print('input right action')
-					adapter.writeDataErrToLog('portForward', 'action', self.action, sys._getframe().f_lineno,\
+					adapter.writeDataErrToLog('portForward', 'action', self.action, sys._getframe().f_lineno,
 					'please input right action: add, del, modify' )
 
 def main(data, newData=""):

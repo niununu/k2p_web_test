@@ -15,7 +15,7 @@ import time
 class upnpClass(object):
 	"""docstring for upnpClass"""
 	def __init__(self, arg):
-		self.enable = arg['enable']
+		self.enable = arg.get('enable', '')
 
 	def upnp(self):
 		adapter.clickApp()

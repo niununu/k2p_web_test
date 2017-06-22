@@ -17,9 +17,9 @@ import loginData
 class changePwdClass(object):
 	"""docstring for changePwdClass"""
 	def __init__(self, arg):
-		self.pwdNew = arg['pwdNew']
+		self.pwdNew = arg.get('pwdNew', '')
 		if arg['pwdOld'] != "*":
-			self.pwdOld = arg['pwdOld']
+			self.pwdOld = arg.get('pwdOld', '')
 		else:
 			self.pwdOld = loginData.login_data['login_pwd']
 

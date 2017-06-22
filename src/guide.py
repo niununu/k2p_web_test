@@ -19,19 +19,19 @@ import time
 class guideClass(object):
 	"""docstring for guideClass"""
 	def __init__(self, arg):
-		self.login_pwd = arg['login_pwd']
-		self.ssid_24G = arg['ssid_24G']
-		self.ssid_5G = arg['ssid_5G']
-		self.pwd_24G = arg['pwd_24G']
-		self.pwd_5G = arg['pwd_5G']
-		self.setPwd = arg['setPwd']
-		self.network_mode = arg['network_mode']
-		self.pppoePwd = arg['pppoePwd']
-		self.pppoeUser = arg['pppoeUser']
-		self.ip = arg['ip']
-		self.subMask = arg['subMask']
-		self.gateway = arg['gateway']
-		self.dns1 = arg['dns1']
+		self.login_pwd = arg.get('login_pwd', '')
+		self.ssid_24G = arg.get('ssid_24G', '')
+		self.ssid_5G = arg.get('ssid_5G', '')
+		self.pwd_24G = arg.get('pwd_24G', '')
+		self.pwd_5G = arg.get('pwd_5G', '')
+		self.setPwd = arg.get('setPwd', 'True')
+		self.network_mode = arg.get('network_mode', '')
+		self.pppoePwd = arg.get('pppoePwd', '')
+		self.pppoeUser = arg.get('pppoeUser', '')
+		self.ip = arg.get('ip', '')
+		self.subMask = arg.get('subMask', '')
+		self.gateway = arg.get('gateway','')
+		self.dns1 = arg.get('dns1', '')
 
 	def guide(self):
 		if (self.setPwd == 'True' ):

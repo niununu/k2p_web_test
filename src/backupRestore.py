@@ -13,8 +13,8 @@ import adapter, log
 class backupClass(object):
 	"""docstring for backupClass"""
 	def __init__(self, arg):
-		self.mode = arg['mode']
-		self.backupFileDir = arg['backupFileDir']
+		self.mode = arg.get('mode', "")
+		self.backupFileDir = arg.get('backupFileDir', "")
 
 	def backupRestore(self):
 		adapter.clickApp()
@@ -29,6 +29,8 @@ class backupClass(object):
 			adapter.waitandClick('//*[@id="Pop"]/div/div/input[2]')
 		else:
 			print ("please set right mode: 1-generate backup file, 2-backup restore, 3-reset")
+			log.writeDataErrToLog(backupRestore, 'mode', self.mode, '', 
+				"please set right mode: 1-generate backup file, 2-backup restore, 3-reset")
 
 def main(data):
 	log.writeLog(data, 'backupRestore', 1)
