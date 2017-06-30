@@ -81,51 +81,73 @@ def checkData(data):#检查顺序跟页面顺序相同
 
 def matchErrFun():
 	log.writeInfo('new password did not match confirm password error case\n')
-	adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
-	adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]/ul/li[3]')
-	adapter.waitforDisplay('//*[@id="_Widget"]')
-	adapter.waitandSendkeys('//*[@id="PwdOld"]', loginData.login_data['login_pwd'])
-	adapter.waitandSendkeys('//*[@id="PwdNew"]', '12345678')
-	adapter.waitandSendkeys('//*[@id="PwdCfm"]', 'gdkagkd')
-	adapter.waitandClick('//*[@id="SavePwd"]')
+	adaptor.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
+	adaptor.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]/ul/li[3]')
+	adaptor.waitforDisplay('//*[@id="_Widget"]')
+	adaptor.waitandSendkeys('//*[@id="PwdOld"]', loginData.login_data['login_pwd'])
+	adaptor.waitandSendkeys('//*[@id="PwdNew"]', '12345678')
+	adaptor.waitandSendkeys('//*[@id="PwdCfm"]', 'gdkagkd')
+	adaptor.waitandClick('//*[@id="SavePwd"]')
 
 def checkResponse(error):
 	if error == 'none':
 		return
-	webText = adapter.getText('//*[@id="PwdTip"]')
+	webText = adaptor.getText('//*[@id="PwdTip"]')
 
 	if webText == False:
 		log.writeInfo('###Error: no tips on web!')
 		pass
 	else:
 		webText = webText.decode('UTF-8')
-		if webText.find(errTips[error]) == -1:
-			log.writeInfo('###Wrong tips on web : %s\n\n' % webText)
-			log.instertLog(errTips[error], 'Fail')
-		else:
-			log.writeInfo("Tips on web:%s\n\n"%webText)
-			log.instertLog(errTips[error], 'Pass')
 
-	adapter.waitandClick('//*[@id="ModifyPwd"]/i')
+	adaptor.waitandClick('//*[@id="ModifyPwd"]/i')
 	time.sleep(1)
 	return webText
 
-def unitTest():
-	login.main(loginData.login_data)
-	log.unitTestLog('修改管理员密码')
-	data = changeUserPwdData.data_list_1
-	for x in xrange(0,len(data)):
-		error = checkData(data[x])
-		changeUserPwd.main(data[x])
+
+
+class TestCase(unittest.TestCase):
+	data = [
+		{"pwdNew" : "12345678","pwdOld" : '8dadla'},#"oldPwdErr"
+		{"pwdNew" : "admi","pwdOld" : '*'},#lenErr
+		{'pwdNew' : '1  2  3','pwdOld' : '*'},#charErr
+		{'pwdNew' : '12345678','pwdOld' : '*'},#pwdSameErr
+		{'pwdNew' : "",'pwdOld' : ""},#oldPwdBlank
+		{'pwdNew' : "",'pwdOld' : "*"}#newPwdBlank
+	]
+	def test_oldPwdErr(self):
+		error = checkData(self.data[1])
+		changeUserPwd.main(self.data[1])
 		checkResponse(error)
-	matchErrFun()
-	checkResponse(errcode[3])
-
-	adapter.closeDriver()
-
+	def test_lenErr(self):
+		error = checkData(self.data[2])
+		changeUserPwd.main(self.data[2])
+		checkResponse(error)
+	def test_charErr(self):
+		error = checkData(self.data[1])
+		changeUserPwd.main(self.data[1])
+		checkResponse(error)
+	def test_pwdSameErr(self):
+		error = checkData(self.data[1])
+		changeUserPwd.main(self.data[1])
+		checkResponse(error)
+	def test_oldPwdBlank(self):
+		error = checkData(self.data[1])
+		changeUserPwd.main(self.data[1])
+		checkResponse(error)
+	def test_newPwdBlank(self):
+		error = checkData(self.data[1])
+		changeUserPwd.main(self.data[1])
+		checkResponse(error)
+	def test_matchErr(self):
+		matchErrFun()
+		checkResponse(errcode[3])
 
 if __name__ == '__main__':
-	#unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='cal_report',report_title='修改管理员密码试报告'))
-	unitTest()
+	login.main(loginData.login_data)
+	#生成测试报告
+	unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='test_report',report_title='修改管理员密码试报告'))
+	adaptor.closeDriver()
+
 
 

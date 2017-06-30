@@ -2,81 +2,112 @@
 #!/usr/bin/env python
 ############################################################
 #
-# FILE NAME  :   luci.sh
+# FILE NAME  :   guide.py
 # VERSION    :   1.0
-# DESCRIPTION:   K2P旧UI升级到新UI时，etc/config/luci文件配置适配
+# DESCRIPTION:   快速向导
 # AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
 import login
 import sys
-import adapter, log, configApi
+import adaptor, log, configApi, debug
 sys.path.append('../data')
-import loginData
+import loginData, guideData
 import time
 
-class guideClass(object):
+class baseClass(object):
 	"""docstring for guideClass"""
 	def __init__(self, arg):
 		self.login_pwd = arg.get('login_pwd', '')
+		self.setPwd = arg.get('setPwd', '')
 		self.ssid_24G = arg.get('ssid_24G', '')
+		self.pwd_24G = arg.get('pwd_24G', "")
 		self.ssid_5G = arg.get('ssid_5G', '')
-		self.pwd_24G = arg.get('pwd_24G', '')
 		self.pwd_5G = arg.get('pwd_5G', '')
-		self.setPwd = arg.get('setPwd', 'True')
-		self.network_mode = arg.get('network_mode', '')
-		self.pppoePwd = arg.get('pppoePwd', '')
-		self.pppoeUser = arg.get('pppoeUser', '')
-		self.ip = arg.get('ip', '')
-		self.subMask = arg.get('subMask', '')
-		self.gateway = arg.get('gateway','')
-		self.dns1 = arg.get('dns1', '')
 
-	def guide(self):
-		if (self.setPwd == 'True' ):
-			adapter.waitandClick('//*[@id="Start"]')
-			adapter.waitandSendkeys('//*[@id="PwdNew"]', self.login_pwd)
-			adapter.waitandSendkeys('//*[@id="PwdCfm"]', self.login_pwd)
-			adapter.waitandClick('//*[@id="Save"]')
+	def mode_guide(self):
+		pass
+
+	def pwdSet(self):
+		if (self.setPwd != 'False' ):
+			adaptor.waitandClick('//*[@id="Start"]')
+			adaptor.waitandSendkeys('//*[@id="PwdNew"]', self.login_pwd)
+			adaptor.waitandSendkeys('//*[@id="PwdCfm"]', self.login_pwd)
+			adaptor.waitandClick('//*[@id="Save"]')
 			time.sleep(1)
 			configApi.cfgSet('loginData', 'login_data', 'login_pwd', self.login_pwd)
 		else:
 			login.main(loginData.login_data)
 
-		#adapter.waitforDisplay('//*[@id="Pop"]')
-		adapter.waitforDisappear('//*[@id="Pop"]')
-		adapter.waitandClick('//*[@id="WanType"]/span')
+	def networkSet(self):
+		adaptor.waitforDisplay('//*[@id="Pop"]')
+		adaptor.waitforDisappear('//*[@id="Pop"]')
+		adaptor.waitandClick('//*[@id="WanType"]/span')
+		self.mode_guide()
+		adaptor.waitandClick('//*[@id="Save"]')
 
-		if self.network_mode == 'dhcp':
-			adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
-		elif self.network_mode == 'pppoe':
-			adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
-			adapter.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser)
-			adapter.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd)
-		elif self.network_mode == 'static':
-			adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
-			adapter.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
-			adapter.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
-			adapter.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
-			adapter.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
-		else :
-			print("please input right mode: dhcp, pppoe, static")
-			log.writeadapterErrToLog('guide', 'input data error')
+	def wifiSet(self):
+		adaptor.waitforDisappear('//*[@id="Pop"]')
+		adaptor.waitandSendkeys('//*[@id="Ssid2G"]', self.ssid_24G)
+		adaptor.waitandSendkeys('//*[@id="Pwd2G"]', self.pwd_24G)
+		adaptor.waitandSendkeys('//*[@id="Ssid5G"]', self.ssid_5G)
+		adaptor.waitandSendkeys('//*[@id="Pwd5G"]', self.pwd_5G)
 
-		#adapter.waitandClick('//*[@id="Save"]')
+	def guide(self):
+		self.pwdSet()
+		self.networkSet()
+		self.wifiSet()
+		adaptor.waitandClick('//*[@id="SaveReboot"]')
 
-		adapter.waitforDisappear('//*[@id="Pop"]')
-		adapter.waitandSendkeys('//*[@id="Ssid2G"]', self.ssid_24G)
-		adapter.waitandSendkeys('//*[@id="Pwd2G"]', self.pwd_24G)
-		adapter.waitandSendkeys('//*[@id="Ssid5G"]', self.ssid_5G)
-		adapter.waitandSendkeys('//*[@id="Pwd5G"]', self.pwd_5G)
+class dhcpClass(baseClass):
+	"""docstring for dhcpClass"""
+	def mode_guide(self):
+		adaptor.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
 
-		adapter.waitandClick('//*[@id="SaveReboot"]')
+class pppoeClass(baseClass):
+	"""docstring for ppoeClass"""
+	def __init__(self, arg):
+		super(pppoeClass, self).__init__(arg)#调用基类构造函数
+		self.pppoePwd = arg.get('pppoePwd', '')
+		self.pppoeUser = arg.get('pppoeUser', '')
+	def mode_guide(self):
+		adaptor.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
+		adaptor.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser)
+		adaptor.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd)
+
+class staticClass(baseClass):
+	"""docstring for staticClass"""
+	def __init__(self, arg):
+		super(staticClass, self).__init__(arg)
+		self.ip = arg.get('ip', '')
+		self.subMask = arg.get('subMask', '')
+		self.gateway = arg.get('gateway','')
+		self.dns1 = arg.get('dns1', '')
+	def mode_guide(self):
+		adaptor.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
+		adaptor.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
+		adaptor.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
+		adaptor.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
+		adaptor.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
+
+
+def classSelector(data):
+	subClass = {
+		'pppoe' : (lambda data: pppoeClass(data)),
+		'dhcp' : (lambda data: dhcpClass(data)),
+		'static' : (lambda data: staticClass(data))
+	}
+	return subClass.get(data['network_mode'], None)(data)
 
 def main(data):
-	log.writeLog(data, 'guide', 1)
-	guideObj = guideClass(data)
-	adapter.openDriver()
+	log.writeFuncLog(data, 1)
+	guideObj = classSelector(data)
+	adaptor.openDriver()
 	guideObj.guide()
-	log.writeLog(data, 'guide', 2)
+	log.writeFuncLog(data, 2)
+
+if __name__ == '__main__':
+	main(guideData.guide_data_1)
+	main(guideData.guide_data_2)
+	main(guideData.guide_data_3)

@@ -1,6 +1,6 @@
 [TOC]
 # 通用接口函数
-## src/adapter.py
+## src/adaptor.py
 ### 数据
 ```python
 driver = webdriver.Chrome() #驱动的浏览器
@@ -43,11 +43,11 @@ logDir = '../log/log-%s.txt' % (time.strftime('%Y-%m-%d',time.localtime(time.tim
 ```
 ### 函数
 ```python
-- def writeLog(data, moduleName, mode) #模块运行记录
+- def writeFuncLog(data, mode) #模块运行记录
 #data:数据，moduleName:模块名, mode: 1-模块开始运行，2-模块运行结束
-- def writewebErrToLog(funcName, errName="", xpath="") #页面错误记录
+- def writewebErrToLog(errName="", xpath="") #页面错误记录
 #funcName:出现错误的函数名, errName:错误名(可选), xpath:错误元素xpath(可选)
-- def writeDataErrToLog(funcName, data, value, line, tips="") #输入数据错误记录
+- def writeDataErrToLog(data, value, tips="") #输入数据错误记录
 #funcName:出现错误的函数名，data:数据名称，value:输入的数据值，line:出现错误数据的行号，tips:提示(可选)
 - def writeInfo(info) #写入信息到日志
 #info:需要写入的信息

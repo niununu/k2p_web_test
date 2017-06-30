@@ -22,7 +22,7 @@ networkset_data_2= {
 	'ip': '10.10.10.1',
 	'subMask': '255.255.0.0',
 	'gateway': '10.10.10.1',
-	'moreSet' : 'False'
+	'moreSet' : 'True'
 }
 
 networkset_data_3= {

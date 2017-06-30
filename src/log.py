@@ -4,45 +4,54 @@
 #
 # FILE NAME  :   log.py
 # VERSION    :   1.0
-# DESCRIPTION:   将运行结果写入log,error信息以"###"开头，方便搜索
+# DESCRIPTION:   将运行结果写入log
 #
 # AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import adapter
-import time
+import adaptor
+import time, sys
 localtime = time.asctime( time.localtime(time.time()))
-logDir = '../log/log-%s.txt' % (time.strftime('%Y-%m-%d',time.localtime(time.time())))
+logDir = '../log/operation_log-%s.md' % (time.strftime('%Y-%m-%d',time.localtime(time.time())))
 unitTestLogDir = '../log/unitTest-%s.md'% (time.strftime('%Y-%m-%d',time.localtime(time.time())))
 
-def writeLog(data, moduleName, mode):
+def writeFuncLog(data, mode):
+	f = sys._getframe()
+	moduleName = f.f_back.f_code.co_filename
+	moduleName = moduleName.split('/')[-1]#去除文件路径
+	moduleName = moduleName.split('.')[-2]#去除.py后缀
+
 	with open(logDir, 'a') as fileObject:
-		if mode == 1:#moduleBegin
-			fileObject.write('\n%s, %s begin\n'%(localtime, moduleName))
-			fileObject.write("Set Data :\n")
+		if mode == 1: #moduleBegin
+			fileObject.write('\n# %s begin\n%s \n'%(moduleName, localtime))
+			fileObject.write("### Set Data\n")
 			for key in data:
 				fileObject.write('\t%s = %s\n' % (key, data[key]))
-		else:#modulEnd
-			fileObject.write('%s, %s end\n\n'%(localtime, moduleName))
+		else: #modulEnd
+			fileObject.write('%s, %s end\n\n'%(moduleName, localtime))
 
-def writewebErrToLog(funcName, errName="", xpath=""):
+def writewebErrToLog(errName="", xpath=""):
+	f = sys._getframe()
+	funcName = f.f_back.f_code.co_name
 	with open(logDir, 'a') as fileObject:
-		fileObject = open(logDir, 'a')
-		fileObject.write('###webError:\nfunName:%s, error:%s, xpath:%s, \ntime:%s\n' 
+		fileObject.write('**WebError**\n- funName:%s\n- error:%s\n- xpath:%s\n- time:%s\n' 
 			% (funcName, errName, xpath, localtime))
 	try:
-		adapter.closeDriver()
+		adaptor.closeDriver()
 		os._exit(0)
 	except :
 		print('catch error, exit')
 
-def writeDataErrToLog(funcName, data, value, line, tips=""):
+def writeDataErrToLog(data, value, tips=""):
+	f = sys._getframe()
+	funcName = f.f_back.f_code.co_name
+	line = f.f_back.f_lineno
 	with open(logDir, 'a') as fileObject:
-		fileObject.write('###DataError:\nfunName:%s, data:%s, value:%s, line:%s\ntips:%s'
+		fileObject.write('**DataError**\n- funName:%s\n- data:%s, value:%s\n- line:%s\n- tips:%s\n'
 			%(funcName, data, value, line, tips))
 	try:
-		adapter.closeDriver()
+		adaptor.closeDriver()
 		os._exit(0)
 	except :
 		print('catch error, exit')
@@ -57,9 +66,21 @@ def unitTestLog(title):
 	with open(unitTestLogDir, 'a') as fileObject:
 		fileObject.write(strw)
 
-def instertLog(caseName, status):
-	strw = '| %s\t\t\t\t\t | %s\t\t\t\t\t |\n'%(caseName, status)
-	with open(unitTestLogDir, 'a') as fileObject:
-		fileObject.write(strw)
+if __name__ == '__main__':
+	data = {
+		'mode' : 'dhcp',#dhcp
+		'dns1': '114.114.114.114',
+		'dns2': '8.8.8.8',
+		'mtu': '1492',
+		'pppoePwd': '',
+		'pppoeUser': '',
+		'ip': '192.168.2.1',
+		'subMask': '255.255.255.0',
+		'gateway': '192.168.2.1',
+		'moreSet' : 'False'
+	}
+	writeFuncLog(data,1)
+	writewebErrToLog()
+	writeDataErrToLog('test', 111, 'dhlakhdla')
 
 

@@ -7,13 +7,18 @@
 # sys.path.append('../../k2p_web_test')
 # from src import *
 # from data import *
-# adapter.openDriver()
+# adaptor.openDriver()
 # login.main(loginData.login_data)
-# adapter.clickApp()
-# adapter.srcollAction('bottom')
-# adapter.srcollAction('top')
+# adaptor.clickApp()
+# adaptor.srcollAction('bottom')
+# adaptor.srcollAction('top')
 
-
+test = 'guide.py'
+# print len(test)
+# index = test.index('g', -1, -len(test))
+# print index
+# print test[index]
+print test.split('/')[-1]
 
 
 

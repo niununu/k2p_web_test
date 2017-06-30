@@ -1,5 +1,14 @@
 # -*- coding: UTF-8 -*-
 #!/usr/bin/env python
+############################################################
+#
+# FILE NAME  :   adaptor.py
+# VERSION    :   1.0
+# DESCRIPTION:   接口函数
+# AUTHOR     :   LiuLu <lu.liu@phicomm.com>
+# CREATE DATE:   04/06/2017
+#
+##############################################################
 from selenium import webdriver
 import os
 import time
@@ -9,10 +18,12 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 import log
+
+
 driver = webdriver.Chrome()
 #driver = webdriver.Firefox()
-networkRestartTime = 40
-rebootTime = 70
+networkRestartTime = 120
+rebootTime = 120
 
 def openDriver():
 	driver.get("http://p.to")
@@ -23,21 +34,21 @@ def waitandClick(xpath):
 		WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitandClick, TimeoutException, xpath = %s\n' % xpath)
-		log.writewebErrToLog('waitandClick', 'TimeoutException', xpath)
+		log.writewebErrToLog('TimeoutException', xpath)
 		return False
-
-	driver.find_element_by_xpath(xpath).click()
+	else:
+		driver.find_element_by_xpath(xpath).click()
 
 def waitandSendkeys(xpath, keys):
 	try:
 		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	except TimeoutException as e:
 		print('Error:waitandSendkeys, TimeoutException, xpath = %s\n' % xpath)
-		log.writewebErrToLog('waitandSendkeys', 'TimeoutException', xpath)
+		log.writewebErrToLog('TimeoutException', xpath)
 		return False
-
-	driver.find_element_by_xpath(xpath).clear()
-	driver.find_element_by_xpath(xpath).send_keys(keys)
+	else:
+		driver.find_element_by_xpath(xpath).clear()
+		driver.find_element_by_xpath(xpath).send_keys(keys)
 
 def clickApp():
 	time.sleep(1)
@@ -59,6 +70,8 @@ def alwaysOpenSwitch(xpath, switchValue='data-value'):
 	button = driver.find_element_by_xpath(xpath)
 	if button.get_attribute(switchValue) == '0':
 		button.click()
+		waitforDisappear('//*[@id="Pop"]')
+
 
 def alwaysCloseSwitch(xpath, switchValue='data-value'):
 	WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpath)))
@@ -68,7 +81,7 @@ def alwaysCloseSwitch(xpath, switchValue='data-value'):
 
 def closeDriver():
 	#time.sleep(15) 
-	time.sleep(1)
+	time.sleep(3)
 	driver.quit()
 	os.system('killall chromedriver')
 	os.system('killall geckodriver')
@@ -77,20 +90,13 @@ def refresh():
 	driver.refresh()
 
 def waitforDisappear(xpath):
-	waitforDisplay(xpath)
-	try:
-		WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
-	except TimeoutException as e:
-		print('Error:waitforDisappear, TimeoutException, xpath = %s\n' % xpath)
-		log.writewebErrToLog('waitforDisappear', 'TimeoutException', xpath)
-		return False
-
+	time.sleep(1)
 	try:
 		process = driver.find_element_by_xpath(xpath)
 		WebDriverWait(driver, 20).until_not(lambda driver: process.is_displayed())
 	except NoSuchElementException as e:
 		print('Error:waitforDisappear, NoSuchElementException, xpath = %s\n' % xpath)
-		log.writewebErrToLog('waitforDisappear', 'NoSuchElementException', xpath)
+		log.writewebErrToLog('NoSuchElementException', xpath)
 		return False
 
 def waitforDisplay(xpath):
@@ -106,7 +112,7 @@ def waitforDisplay(xpath):
 		WebDriverWait(driver, 10).until(lambda driver: process.is_displayed())
 	except NoSuchElementException as e:
 		print('Error:waitforDisplay, NoSuchElementException, xpath = %s\n' % xpath)
-		log.writewebErrToLog('waitforDisplay', 'NoSuchElementException', xpath)
+		log.writewebErrToLog('NoSuchElementException', xpath)
 		return False
 
 def elementIsDisplayed(xpath):
@@ -116,6 +122,7 @@ def elementIsDisplayed(xpath):
 		return False
 	return True
 
+#判断data是否在表格中，在就返回行号，否则返回0
 def getElementInTable(tableXpath, baseXpath, arrData):
 	table = driver.find_element_by_xpath(tableXpath)
 	#table的总行数，包含标题

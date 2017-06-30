@@ -2,20 +2,22 @@
 #!/usr/bin/env python
 ############################################################
 #
-# FILE NAME  :   luci.sh
+# FILE NAME  :   portForward.py
 # VERSION    :   1.0
-# DESCRIPTION:   K2P旧UI升级到新UI时，etc/config/luci文件配置适配
+# DESCRIPTION:   端口转发
 # AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import adapter, log
+import adaptor, log, login
 import sys
+sys.path.append('../../k2p_web_test')
+from data import loginData, portForwardData
 import time
 
-class portForwardClass(object):
-	"""docstring for portForwardClass"""
-	def __init__(self, arg):·
+class baseClass(object):
+	"""docstring for baseClass"""
+	def __init__(self, arg):
 		self.enable = arg.get('enable', '1')
 		self.ruleName = arg.get('ruleName', '')
 		self.serverIP = arg.get('serverIP', '')
@@ -25,60 +27,86 @@ class portForwardClass(object):
 		self.action = arg.get('action', '')
 
 	def portForward(self):
-		adapter.clickApp()
-		adapter.srcollAction('bottom')
-		adapter.waitandClick('//*[@id="AppList"]/ul[4]/a[4]/li')
+		adaptor.clickApp()
+		adaptor.srcollAction('bottom')
+		adaptor.waitandClick('//*[@id="AppList"]/ul[4]/a[4]/li')
 		if self.enable == '0':
-			adapter.alwaysCloseSwitch('//*[@id="SwitchFwd"]', 'data-value')
+			adaptor.alwaysCloseSwitch('//*[@id="SwitchFwd"]', 'data-value')
 		else :
-			adapter.alwaysOpenSwitch('//*[@id="SwitchFwd"]')
+			adaptor.alwaysOpenSwitch('//*[@id="SwitchFwd"]')
 			self.actionFun()
 		time.sleep(1)
 
+	def getElement(self):
+		arr = ["", self.ruleName, self.serverIP, self.outerPort, self.innerPort, self.protocol]
+		return (adaptor.getElementInTable('//*[@id="PortfwdTab"]','//*[@id="PortfwdTab"]/tbody', arr))
+
 	def actionFun(self):
-		if self.action == 'add':
-			if adapter.elementIsDisplayed('//*[@id="FwdTab"]/ul'):
-				adapter.waitandClick('//*[@id="FwdTab"]/ul')
+		pass
 
-			adapter.waitandSendkeys('//*[@id="RuleName"]', self.ruleName)
-			adapter.waitandSendkeys('//*[@id="ServerIp"]', self.serverIP)
-			adapter.waitandSendkeys('//*[@id="ExternalPort"]', self.outerPort)
-			adapter.waitandSendkeys('//*[@id="InternalPort"]', self.innerPort)
-			adapter.waitandClick('//*[@id="PortAgreement"]/span')
-			if self.protocol == 'TCP':
-				adapter.waitandClick('//*[@id="sel-opts-ulPortAgreement"]/li[1]')
-			elif self.protocol == 'UDP':
-				adapter.waitandClick('//*[@id="sel-opts-ulPortAgreement"]/li[2]')
-			else:
-				adapter.waitandClick('//*[@id="sel-opts-ulPortAgreement"]/li[3]')
+class addRuleClass(baseClass):
+	"""docstring for addClass"""
+	def actionFun(self):
+		pass
+		if adaptor.elementIsDisplayed('//*[@id="FwdTab"]/ul'):
+			adaptor.waitandClick('//*[@id="FwdTab"]/ul')
 
-			if adapter.elementIsDisplayed('//*[@id="SaveAdd"]'):
-				adapter.waitandClick('//*[@id="SaveAdd"]')
-			elif adapter.elementIsDisplayed('//*[@id="SaveEdit"]'):
-				adapter.waitandClick('//*[@id="SaveEdit"]')
-		else :
-			arr = ["", self.ruleName, self.serverIP, self.outerPort, self.innerPort, self.protocol]
-			row = adapter.getElementInTable('//*[@id="PortfwdTab"]','//*[@id="PortfwdTab"]/tbody', arr)
-			if row != 0:
-				if self.action == 'del':
-					xpath = '//*[@id="PortfwdTab"]/tbody/tr[%d]/td[6]/span[2]' % row
-					adapter.waitandClick(xpath)
-				elif self.action == 'modify':
-					xpath = '//*[@id="PortfwdTab"]/tbody/tr[%d]/td[6]/span[1]' % row
-					adapter.waitandClick(xpath)
-				else:
-					print('input right action')
-					adapter.writeDataErrToLog('portForward', 'action', self.action, sys._getframe().f_lineno,
-					'please input right action: add, del, modify' )
+		adaptor.waitandSendkeys('//*[@id="RuleName"]', self.ruleName)
+		adaptor.waitandSendkeys('//*[@id="ServerIp"]', self.serverIP)
+		adaptor.waitandSendkeys('//*[@id="ExternalPort"]', self.outerPort)
+		adaptor.waitandSendkeys('//*[@id="InternalPort"]', self.innerPort)
+
+		adaptor.waitandClick('//*[@id="PortAgreement"]/span')
+		if self.protocol == 'TCP':
+			adaptor.waitandClick('//*[@id="sel-opts-ulPortAgreement"]/li[1]')
+		elif self.protocol == 'UDP':
+			adaptor.waitandClick('//*[@id="sel-opts-ulPortAgreement"]/li[2]')
+		else:
+			adaptor.waitandClick('//*[@id="sel-opts-ulPortAgreement"]/li[3]')
+
+		if adaptor.elementIsDisplayed('//*[@id="SaveAdd"]'):
+			adaptor.waitandClick('//*[@id="SaveAdd"]')
+		elif adaptor.elementIsDisplayed('//*[@id="SaveEdit"]'):
+			adaptor.waitandClick('//*[@id="SaveEdit"]')
+
+class delRuleClass(baseClass):
+	"""docstring for delRuleClass"""
+	def actionFun(self):
+		pass
+		row = self.getElement()
+		if row != 0:
+			xpath = '//*[@id="PortfwdTab"]/tbody/tr[%d]/td[6]/span[2]' % row
+			adaptor.waitandClick(xpath)
+class modifyRuleClass(baseClass):
+	"""docstring for modifyRuleClass"""
+	def actionFun(self):
+		pass
+		row = self.getElement()
+		if row != 0:
+			xpath = '//*[@id="PortfwdTab"]/tbody/tr[%d]/td[6]/span[1]' % row
+			adaptor.waitandClick(xpath)
+
+def classSelector(data):
+	subClass = {
+		'add': (lambda data: addRuleClass(data)),
+		'del': (lambda data: delRuleClass(data)),
+		'modify': (lambda data: modifyRuleClass(data))
+	}
+	return subClass.get(data['action'], None)(data)
 
 def main(data, newData=""):
-	log.writeLog(data, ('portForward-%s'%data['action']), 1)
-	portForwardObj = portForwardClass(data)
+	log.writeFuncLog(data, 1)
+	portForwardObj = classSelector(data)
 	portForwardObj.portForward()
 	if newData != "":
-		log.writeLog(newData, 'newData:', 1)
+		log.writeFuncLog(newData, 1)
 		newData['action'] = 'add'
 		newData['enable'] = '1'
-		portForwardObj = portForwardClass(newData)
+		portForwardObj = classSelector(newData)
 		portForwardObj.actionFun()
-	log.writeLog(data, 'portForward', 2)
+	log.writeFuncLog(data, 2)
+
+if __name__ == '__main__':
+	login.main(loginData.login_data)
+	main(portForwardData.port_forward_data_1)
+

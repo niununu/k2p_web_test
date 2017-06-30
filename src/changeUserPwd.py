@@ -2,17 +2,17 @@
 #!/usr/bin/env python
 ############################################################
 #
-# FILE NAME  :   
+# FILE NAME  :   changeUserPwd.py
 # VERSION    :   1.0
 # DESCRIPTION:   修改管理员密码
 # AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import adapter, log, configApi
+import adaptor, log, configApi
 import time, sys
 sys.path.append('../data')
-import loginData
+import loginData, changeUserPwdData
 
 class changePwdClass(object):
 	"""docstring for changePwdClass"""
@@ -24,20 +24,24 @@ class changePwdClass(object):
 			self.pwdOld = loginData.login_data['login_pwd']
 
 	def changeUserPwd(self):
-		adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
-		adapter.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]/ul/li[3]')
-		adapter.waitforDisplay('//*[@id="_Widget"]')
-		adapter.waitandSendkeys('//*[@id="PwdOld"]', self.pwdOld)
-		adapter.waitandSendkeys('//*[@id="PwdNew"]', self.pwdNew)
-		adapter.waitandSendkeys('//*[@id="PwdCfm"]', self.pwdNew)
+		adaptor.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]')
+		adaptor.waitandClick('//*[@id="Con"]/div[1]/ul[2]/li[1]/ul/li[3]')
+		adaptor.waitforDisplay('//*[@id="_Widget"]')
+		adaptor.waitandSendkeys('//*[@id="PwdOld"]', self.pwdOld)
+		adaptor.waitandSendkeys('//*[@id="PwdNew"]', self.pwdNew)
+		adaptor.waitandSendkeys('//*[@id="PwdCfm"]', self.pwdNew)
 
-		adapter.waitandClick('//*[@id="SavePwd"]')
+		adaptor.waitandClick('//*[@id="SavePwd"]')
 		time.sleep(1)
-		if adapter.elementIsDisplayed('//*[@id="Pwd"]'):
+		if adaptor.elementIsDisplayed('//*[@id="Pwd"]'):
 			configApi.cfgSet('loginData', 'login_data', 'login_pwd', self.pwdNew)
 
 def main(data):
-	log.writeLog(data, 'changeUserPwd', 1)
+	log.writeFuncLog(data, 1)
 	changePwdObj = changePwdClass(data)
 	changePwdObj.changeUserPwd()
-	log.writeLog(data, 'changeUserPwd', 2)
+	log.writeFuncLog(data, 2)
+
+if __name__ == '__main__':
+	login.main(loginData.login_data)
+	main(changeUserPwdData.changeUserPwd_data_1)

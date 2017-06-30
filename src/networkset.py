@@ -2,16 +2,21 @@
 #!/usr/bin/env python
 ############################################################
 #
-# FILE NAME  :   
+# FILE NAME  :   network.py
 # VERSION    :   1.0
 # DESCRIPTION:   上网设置
 # AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   
 #
 ##############################################################
+import sys 
+sys.path.append('../../k2p_web_test')
+from data import loginData, networksetData
+import login, adaptor, log
 import time
-import adapter, log
-class networkSetClass(object):
+
+class baseClass(object):
+	"""docstring for networkSet"""
 	def __init__(self, arg):
 		self.dns1 = arg.get('dns1', '')
 		self.dns2 = arg.get('dns2', '')
@@ -24,65 +29,75 @@ class networkSetClass(object):
 		self.mode = arg.get('mode', '')
 		self.moreSet = arg.get('moreSet', '')
 
+	def SeniorSet(self, flag = True):
+		adaptor.srcollAction('bottom')
+		adaptor.waitandClick('//*[@id="SeniorSet"]')
+		adaptor.waitandSendkeys('//*[@id="Mtu"]', self.mtu)
+		adaptor.srcollAction('bottom')
+
+		if flag:
+			adaptor.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')
+			adaptor.srcollAction('bottom')
+			adaptor.waitandSendkeys('//*[@id="SeniorPrimDns"]', self.dns1)
+			adaptor.waitandSendkeys('//*[@id="SeniorSecDns"]', self.dns2)
+
+	def mode_networkSet(self):
+		pass
+
 	def networkSet(self):
-		adapter.clickApp()
-		adapter.srcollAction('top')
+		adaptor.clickApp()
+		adaptor.srcollAction('top')
+		adaptor.waitandClick('//*[@id="AppList"]/ul[1]/a[2]/li')
+		adaptor.waitandClick('//*[@id="WanType"]')
 
-		adapter.waitandClick('//*[@id="AppList"]/ul[1]/a[2]/li')
-		adapter.waitandClick('//*[@id="WanType"]')
-
-		if self.mode == 'dhcp':#dhcp
-			self.networkSet_dhcp()
-		elif self.mode == 'pppoe':#pppoe
-			self.networkSet_pppoe()
-		elif self.mode == 'static':#static
-			self.networkSet_static()
-		else:
-			adapter.writeadapterErrToLog('networkSet', 'input data error')
-			print("please input right mode: dhcp, pppoe, static")
-			return
-
+		self.mode_networkSet()
 		if self.moreSet == 'True':
 			if self.mode == 'static':
 				self.SeniorSet(flag = False)
 			else:
 				self.SeniorSet()
 
-		adapter.srcollAction('bottom')
-		adapter.waitandClick('//*[@id="Save"]')
+		adaptor.srcollAction('bottom')
+		adaptor.waitandClick('//*[@id="Save"]')
 
-	def networkSet_dhcp(self):
-		adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
+class dhcp_networkSet(baseClass):
+	"""docstring for dhcp_networkSet"""
+	def mode_networkSet(self):
+		adaptor.waitandClick('//*[@id="sel-opts-ulWanType"]/li[1]')
 
-	def networkSet_pppoe(self):
-		adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
-		adapter.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser )
-		adapter.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd )
+class pppoe_networkSet(baseClass):
+	"""docstring for pppoe_networkSet"""
+	def mode_networkSet(self):
+		adaptor.waitandClick('//*[@id="sel-opts-ulWanType"]/li[2]')
+		adaptor.waitandSendkeys('//*[@id="PppoeUser"]', self.pppoeUser )
+		adaptor.waitandSendkeys('//*[@id="PppoePwd"]', self.pppoePwd )
 
-	def networkSet_static(self):
-		adapter.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
-		adapter.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
-		adapter.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
-		adapter.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
-		adapter.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
-		adapter.waitandSendkeys('//*[@id="SecDns"]', self.dns2)
+class static_networkSet(baseClass):
+	"""docstring for static_networkSet"""
+	def mode_networkSet(self):
+		adaptor.waitandClick('//*[@id="sel-opts-ulWanType"]/li[3]')
+		adaptor.waitandSendkeys('//*[@id="WanIpaddr"]', self.ip)
+		adaptor.waitandSendkeys('//*[@id="WanMask"]', self.subMask)
+		adaptor.waitandSendkeys('//*[@id="WanGw"]', self.gateway)
+		adaptor.waitandSendkeys('//*[@id="PrimDns"]', self.dns1)
+		adaptor.waitandSendkeys('//*[@id="SecDns"]', self.dns2)
 
-	def SeniorSet(self, flag = True):
-		adapter.srcollAction('bottom')
-		adapter.waitandClick('//*[@id="SeniorSet"]')
-		adapter.waitandSendkeys('//*[@id="Mtu"]', self.mtu)
-		adapter.srcollAction('bottom')
-
-		if flag:
-			adapter.alwaysOpenSwitch('//*[@id="Switch"]', 'data-value')
-			adapter.srcollAction('bottom')
-			adapter.waitandSendkeys('//*[@id="SeniorPrimDns"]', self.dns1)
-			adapter.waitandSendkeys('//*[@id="SeniorSecDns"]', self.dns2)
+def classSelector(data):
+	subClass = {
+		'pppoe' : (lambda data: pppoe_networkSet(data)),
+		'dhcp' : (lambda data: dhcp_networkSet(data)),
+		'static' : (lambda data: static_networkSet(data))
+	}
+	return subClass.get(data['mode'], None)(data)
 
 def main(data):
-	log.writeLog(data, 'networkSet', 1)
-	data_1 = networkSetClass(data)
-	data_1.networkSet()
-	log.writeLog(data, 'networkSet', 2)
+	log.writeFuncLog(data, 1)
+	networkSetObj = classSelector(data)
+	networkSetObj.networkSet()
+	log.writeFuncLog(data, 2)
+
+if __name__ == '__main__':
+	login.main(loginData.login_data)
+	main(networksetData.networkset_data_2)
 
 

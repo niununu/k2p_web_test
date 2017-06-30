@@ -1,6 +1,5 @@
 backupRestore_data_1 = {
-	'mode' : '1',#generate backup file
-	'backupFileDir' : ""
+	'mode' : '1'#generate backup file
 }
 
 backupRestore_data_2 = {
@@ -9,6 +8,5 @@ backupRestore_data_2 = {
 }
 
 backupRestore_data_3 = {
-	'mode' : '3',#reset
-	'backupFileDir' : ""
+	'mode' : '3'#reset
 }

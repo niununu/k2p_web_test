@@ -1,5 +1,5 @@
 port_forward_data_1 = {
-	'action' : 'add',#add, del, modify
+	'action' : 'del',#add, del, modify
 	'enable' : '1',
 	'ruleName': '1',
 	'serverIP': '10.10.10.3',

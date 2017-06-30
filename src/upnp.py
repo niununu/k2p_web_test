@@ -2,14 +2,14 @@
 #!/usr/bin/env python
 ############################################################
 #
-# FILE NAME  :   luci.sh
+# FILE NAME  :   upnp.py
 # VERSION    :   1.0
-# DESCRIPTION:   K2P旧UI升级到新UI时，etc/config/luci文件配置适配
+# DESCRIPTION:   upnp功能
 # AUTHOR     :   LiuLu <lu.liu@phicomm.com>
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
-import adapter, log
+import adaptor, log
 import time
 
 class upnpClass(object):
@@ -18,17 +18,17 @@ class upnpClass(object):
 		self.enable = arg.get('enable', '')
 
 	def upnp(self):
-		adapter.clickApp()
-		adapter.srcollAction('bottom')
-		adapter.waitandClick('//*[@id="AppList"]/ul[5]/a[2]/li')
+		adaptor.clickApp()
+		adaptor.srcollAction('bottom')
+		adaptor.waitandClick('//*[@id="AppList"]/ul[5]/a[2]/li')
 
 		if self.enable == '1':
-			adapter.alwaysOpenSwitch('//*[@id="UpnpSwitch"]', 'data-value')
+			adaptor.alwaysOpenSwitch('//*[@id="UpnpSwitch"]', 'data-value')
 		else :
-			adapter.alwaysCloseSwitch('//*[@id="UpnpSwitch"]', 'data-value')
+			adaptor.alwaysCloseSwitch('//*[@id="UpnpSwitch"]', 'data-value')
 
 def main(data):
-	log.writeLog(data, 'upnp', 1)
+	log.writeFuncLog(data, 1)
 	upnpObj = upnpClass(data)
 	upnpObj.upnp()
-	log.writeLog(data, 'upnp', 2)
+	log.writeFuncLog(data, 2)

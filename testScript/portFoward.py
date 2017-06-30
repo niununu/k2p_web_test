@@ -4,15 +4,13 @@ from data import *
 from src import *
 import time
 
-sleepTime = 2
-
 def addRule():
 	data = portForwardData.data_list_1
 	for x in xrange(0,len(data)):
 		data[x]['enable'] = '1'
 		data[x]['action'] = 'add'
 		portForward.main(data[x])
-		time.sleep(sleepTime)
+		adaptor.waitforDisappear('//*[@id="Pop"]')
 
 def modifyRule():
 	data = portForwardData.data_list_1
@@ -21,7 +19,7 @@ def modifyRule():
 		data[x]['enable'] = '1'
 		data[x]['action'] = 'modify'
 		portForward.main(data[x], new_data[x])
-		time.sleep(sleepTime)
+		adaptor.waitforDisappear('//*[@id="Pop"]')
 
 def delRule():
 	data = portForwardData.data_list_2
@@ -29,7 +27,7 @@ def delRule():
 		data[x]['enable'] = '1'
 		data[x]['action'] = 'del'
 		portForward.main(data[x])
-		time.sleep(sleepTime)
+		adaptor.waitforDisappear('//*[@id="Pop"]')
 
 def main():
 	login.main(loginData.login_data)
