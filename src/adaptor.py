@@ -35,7 +35,6 @@ def waitandClick(xpath):
 	except TimeoutException as e:
 		print('Error:waitandClick, TimeoutException, xpath = %s\n' % xpath)
 		log.writewebErrToLog('TimeoutException', xpath)
-		return False
 	else:
 		driver.find_element_by_xpath(xpath).click()
 
@@ -45,7 +44,6 @@ def waitandSendkeys(xpath, keys):
 	except TimeoutException as e:
 		print('Error:waitandSendkeys, TimeoutException, xpath = %s\n' % xpath)
 		log.writewebErrToLog('TimeoutException', xpath)
-		return False
 	else:
 		driver.find_element_by_xpath(xpath).clear()
 		driver.find_element_by_xpath(xpath).send_keys(keys)
@@ -105,15 +103,13 @@ def waitforDisplay(xpath):
 	except TimeoutException as e:
 		print('Error:waitforDisplay, TimeoutException, xpath = %s\n' % xpath)
 		log.writewebErrToLog('waitforDisplay', 'TimeoutException', xpath)
-		return False
-
-	try:
-		process = driver.find_element_by_xpath(xpath)
-		WebDriverWait(driver, 10).until(lambda driver: process.is_displayed())
-	except NoSuchElementException as e:
-		print('Error:waitforDisplay, NoSuchElementException, xpath = %s\n' % xpath)
-		log.writewebErrToLog('NoSuchElementException', xpath)
-		return False
+	else:
+		try:
+			process = driver.find_element_by_xpath(xpath)
+			WebDriverWait(driver, 10).until(lambda driver: process.is_displayed())
+		except NoSuchElementException as e:
+			print('Error:waitforDisplay, NoSuchElementException, xpath = %s\n' % xpath)
+			log.writewebErrToLog('NoSuchElementException', xpath)
 
 def elementIsDisplayed(xpath):
 	try:

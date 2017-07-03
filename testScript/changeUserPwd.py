@@ -76,7 +76,7 @@ def checkData(data):#检查顺序跟页面顺序相同
 		return errcode[4]
 	#pwdSameErr
 	log.writeInfo('No error in data')
-	return 'none'
+	return None
 
 
 def matchErrFun():
@@ -90,7 +90,7 @@ def matchErrFun():
 	adaptor.waitandClick('//*[@id="SavePwd"]')
 
 def checkResponse(error):
-	if error == 'none':
+	if error == None:
 		return
 	webText = adaptor.getText('//*[@id="PwdTip"]')
 
@@ -104,50 +104,43 @@ def checkResponse(error):
 	time.sleep(1)
 	return webText
 
-
-
 class TestCase(unittest.TestCase):
 	data = [
 		{"pwdNew" : "12345678","pwdOld" : '8dadla'},#"oldPwdErr"
 		{"pwdNew" : "admi","pwdOld" : '*'},#lenErr
 		{'pwdNew' : '1  2  3','pwdOld' : '*'},#charErr
-		{'pwdNew' : '12345678','pwdOld' : '*'},#pwdSameErr
+		{'pwdNew' : 'admin','pwdOld' : '*'},#pwdSameErr
 		{'pwdNew' : "",'pwdOld' : ""},#oldPwdBlank
 		{'pwdNew' : "",'pwdOld' : "*"}#newPwdBlank
 	]
+
+	def commonAction(self, arg):
+		error = checkData(arg)
+		changeUserPwd.main(arg)
+		self.assertEqual(checkResponse(error), errTips[error])
+
 	def test_oldPwdErr(self):
-		error = checkData(self.data[1])
-		changeUserPwd.main(self.data[1])
-		checkResponse(error)
+		self.commonAction(self.data[0])
 	def test_lenErr(self):
-		error = checkData(self.data[2])
-		changeUserPwd.main(self.data[2])
-		checkResponse(error)
+		self.commonAction(self.data[1])
 	def test_charErr(self):
-		error = checkData(self.data[1])
-		changeUserPwd.main(self.data[1])
-		checkResponse(error)
+		self.commonAction(self.data[2])
 	def test_pwdSameErr(self):
-		error = checkData(self.data[1])
-		changeUserPwd.main(self.data[1])
-		checkResponse(error)
+		self.commonAction(self.data[3])
 	def test_oldPwdBlank(self):
-		error = checkData(self.data[1])
-		changeUserPwd.main(self.data[1])
-		checkResponse(error)
+		self.commonAction(self.data[4])
 	def test_newPwdBlank(self):
-		error = checkData(self.data[1])
-		changeUserPwd.main(self.data[1])
-		checkResponse(error)
+		self.commonAction(self.data[5])
 	def test_matchErr(self):
 		matchErrFun()
-		checkResponse(errcode[3])
+		error = checkResponse(errcode[3])
+		self.assertEqual(checkResponse(error), errTips[error])
 
 if __name__ == '__main__':
 	login.main(loginData.login_data)
 	#生成测试报告
 	unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='test_report',report_title='修改管理员密码试报告'))
-	adaptor.closeDriver()
+	#adaptor.closeDriver()
 
 
 
