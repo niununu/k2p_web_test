@@ -36,11 +36,10 @@ class changePwdClass(object):
 		if adaptor.elementIsDisplayed('//*[@id="Pwd"]'):
 			configApi.cfgSet('loginData', 'login_data', 'login_pwd', self.pwdNew)
 
+@log.writeFuncLog
 def main(data):
-	log.writeFuncLog(data, 1)
 	changePwdObj = changePwdClass(data)
 	changePwdObj.changeUserPwd()
-	log.writeFuncLog(data, 2)
 
 if __name__ == '__main__':
 	login.main(loginData.login_data)

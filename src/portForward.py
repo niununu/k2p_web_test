@@ -42,7 +42,7 @@ class baseClass(object):
 		return (adaptor.getElementInTable('//*[@id="PortfwdTab"]','//*[@id="PortfwdTab"]/tbody', arr))
 
 	def actionFun(self):
-		pass
+		raise NotImplementedError
 
 class addRuleClass(baseClass):
 	"""docstring for addClass"""
@@ -94,17 +94,15 @@ def classSelector(data):
 	}
 	return subClass.get(data['action'], None)(data)
 
+@log.writeFuncLog
 def main(data, newData=""):
-	log.writeFuncLog(data, 1)
 	portForwardObj = classSelector(data)
 	portForwardObj.portForward()
 	if newData != "":
-		log.writeFuncLog(newData, 1)
 		newData['action'] = 'add'
 		newData['enable'] = '1'
 		portForwardObj = classSelector(newData)
 		portForwardObj.actionFun()
-	log.writeFuncLog(data, 2)
 
 if __name__ == '__main__':
 	login.main(loginData.login_data)

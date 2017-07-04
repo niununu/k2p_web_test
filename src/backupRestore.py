@@ -17,7 +17,7 @@ import adaptor, log, login
 class baseClass(object):
 	"""docstring for baseClass"""
 	def actionFun(self):
-		pass
+		raise NotImplementedError
 
 	def backupRestore(self):
 		adaptor.clickApp()
@@ -53,11 +53,10 @@ def classSelector(data):
 	}
 	return subClass.get(data['mode'], None)(data)
 
+@log.writeFuncLog
 def main(data):
-	log.writeFuncLog(data, 1)
 	backupObj = classSelector(data)
 	backupObj.backupRestore()
-	log.writeFuncLog(data, 2)
 
 if __name__ == '__main__':
 	login.main(loginData.login_data)

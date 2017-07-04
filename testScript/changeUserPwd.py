@@ -33,7 +33,7 @@ errTips = {
 	'lenErr' : '新密码长度应为5~63位',
 	'charErr' : "新密码包含非法字符",
 	'matchErr' : '两次密码输入不一致',
-	'pwdSameErr' : '新密码与原密码相同',
+	'pwdSameErr' : '新密码与原密码相同，请重新输入',
 	'oldPwdBlankErr' : '请输入原密码',
 	'newPwdBlankErr' : '请输入新密码'
 }
@@ -101,7 +101,6 @@ def checkResponse(error):
 		webText = webText.decode('UTF-8')
 
 	adaptor.waitandClick('//*[@id="ModifyPwd"]/i')
-	time.sleep(1)
 	return webText
 
 class TestCase(unittest.TestCase):
@@ -118,6 +117,7 @@ class TestCase(unittest.TestCase):
 		error = checkData(arg)
 		changeUserPwd.main(arg)
 		self.assertEqual(checkResponse(error), errTips[error])
+		time.sleep(1)
 
 	def test_oldPwdErr(self):
 		self.commonAction(self.data[0])
@@ -131,16 +131,17 @@ class TestCase(unittest.TestCase):
 		self.commonAction(self.data[4])
 	def test_newPwdBlank(self):
 		self.commonAction(self.data[5])
-	def test_matchErr(self):
-		matchErrFun()
-		error = checkResponse(errcode[3])
-		self.assertEqual(checkResponse(error), errTips[error])
+	# def test_matchErr(self):
+	# 	matchErrFun()
+	# 	error = checkResponse(errcode[3])
+	# 	self.assertEqual(checkResponse(error), errTips[error])
+	# 	time.sleep(1)
 
 if __name__ == '__main__':
 	login.main(loginData.login_data)
 	#生成测试报告
 	unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='test_report',report_title='修改管理员密码试报告'))
-	#adaptor.closeDriver()
+	adaptor.closeDriver()
 
 
 

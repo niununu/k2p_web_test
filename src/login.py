@@ -9,7 +9,10 @@
 # CREATE DATE:   04/06/2017
 #
 ##############################################################
+import sys 
+sys.path.append('../../k2p_web_test')
 import adaptor, log
+from data import loginData
 
 class loginClass(object):
 	"""docstring for login"""
@@ -19,10 +22,15 @@ class loginClass(object):
 	def login(self):
 		adaptor.waitandSendkeys('//*[@id="Pwd"]', self.login_pwd)
 		adaptor.waitandClick('//*[@id="Save"]')
+		# adaptor.waitandSendkeys('/djakdj', self.login_pwd)
+		# adaptor.waitandClick('/dalkdhl')
 
+@log.writeFuncLog
 def main(data):
-	log.writeFuncLog(data, 1)
 	adaptor.openDriver()
 	test1 = loginClass(data)
 	test1.login()
-	log.writeFuncLog(data, 2)
+
+if __name__ == '__main__':
+	main(loginData.login_data)
+

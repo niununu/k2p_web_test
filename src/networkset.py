@@ -42,7 +42,7 @@ class baseClass(object):
 			adaptor.waitandSendkeys('//*[@id="SeniorSecDns"]', self.dns2)
 
 	def mode_networkSet(self):
-		pass
+		raise NotImplementedError
 
 	def networkSet(self):
 		adaptor.clickApp()
@@ -58,7 +58,7 @@ class baseClass(object):
 				self.SeniorSet()
 
 		adaptor.srcollAction('bottom')
-		adaptor.waitandClick('//*[@id="Save"]')
+		#adaptor.waitandClick('//*[@id="Save"]')
 
 class dhcp_networkSet(baseClass):
 	"""docstring for dhcp_networkSet"""
@@ -90,14 +90,15 @@ def classSelector(data):
 	}
 	return subClass.get(data['mode'], None)(data)
 
+@log.writeFuncLog
 def main(data):
-	log.writeFuncLog(data, 1)
 	networkSetObj = classSelector(data)
 	networkSetObj.networkSet()
-	log.writeFuncLog(data, 2)
+
 
 if __name__ == '__main__':
 	login.main(loginData.login_data)
 	main(networksetData.networkset_data_2)
+	adaptor.closeDriver()
 
 

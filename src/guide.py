@@ -27,7 +27,7 @@ class baseClass(object):
 		self.pwd_5G = arg.get('pwd_5G', '')
 
 	def mode_guide(self):
-		pass
+		raise NotImplementedError
 
 	def pwdSet(self):
 		if (self.setPwd != 'False' ):
@@ -100,12 +100,11 @@ def classSelector(data):
 	}
 	return subClass.get(data['network_mode'], None)(data)
 
+@log.writeFuncLog
 def main(data):
-	log.writeFuncLog(data, 1)
 	guideObj = classSelector(data)
 	adaptor.openDriver()
 	guideObj.guide()
-	log.writeFuncLog(data, 2)
 
 if __name__ == '__main__':
 	main(guideData.guide_data_1)

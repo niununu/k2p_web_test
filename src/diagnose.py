@@ -19,8 +19,7 @@ class diagnoseClass(object):
 		adaptor.waitandClick('//*[@id="AppList"]/ul[3]/a[1]/li')
 		adaptor.waitandClick('//*[@id="Start"]')
 
+@log.writeFuncLog
 def main():
-	log.writeFuncLog("", 1)
 	diagnoseObj = diagnoseClass("")
 	diagnoseObj.diagnose()
-	log.writeFuncLog("", 2)

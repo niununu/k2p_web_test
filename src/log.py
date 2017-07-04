@@ -16,32 +16,36 @@ localtime = time.asctime( time.localtime(time.time()))
 logDir = '../log/operation_log-%s.md' % (time.strftime('%Y-%m-%d',time.localtime(time.time())))
 unitTestLogDir = '../log/unitTest-%s.md'% (time.strftime('%Y-%m-%d',time.localtime(time.time())))
 
-def writeFuncLog(data, mode):
-	f = sys._getframe()
-	moduleName = f.f_back.f_code.co_filename
-	moduleName = moduleName.split('/')[-1]#去除文件路径
-	moduleName = moduleName.split('.')[-2]#去除.py后缀
+def writeFuncLog(fun):
+	def wrapper(*args, **kwargs):
+		f=sys._getframe()
+		moduleName=f.f_back.f_code.co_filename
+		moduleName = moduleName.split('/')[-1]#去除文件路径
+		moduleName = moduleName.split('.')[-2]#去除.py后缀
 
-	with open(logDir, 'a') as fileObject:
-		if mode == 1: #moduleBegin
+		with open(logDir, 'a') as fileObject:
 			fileObject.write('\n# %s begin\n%s \n'%(moduleName, localtime))
 			fileObject.write("### Set Data\n")
-			for key in data:
-				fileObject.write('\t%s = %s\n' % (key, data[key]))
-		else: #modulEnd
-			fileObject.write('%s, %s end\n\n'%(moduleName, localtime))
+			for x in args:
+				fileObject.write('\t%s\n' % x)
+			for key in kwargs:
+				fileObject.write('\t%s = %s\n' % (key, kwargs[key]))
 
-def writewebErrToLog(errName="", xpath=""):
-	f = sys._getframe()
-	funcName = f.f_back.f_code.co_name
+		fun(*args, **kwargs)
+
+		with open(logDir, 'a') as fileObject:
+			fileObject.write('%s, %s end\n\n'%(moduleName, localtime))
+	return wrapper
+
+def writewebErrToLog(funcName="",errName="", xpath=""):
 	with open(logDir, 'a') as fileObject:
 		fileObject.write('**WebError**\n- funName:%s\n- error:%s\n- xpath:%s\n- time:%s\n' 
 			% (funcName, errName, xpath, localtime))
 	try:
 		adaptor.closeDriver()
-		os._exit(0)
-	except :
-		print('catch error, exit')
+		sys.exit()
+	except Exception as e:
+		print e.__class__
 
 def writeDataErrToLog(data, value, tips=""):
 	f = sys._getframe()
@@ -52,9 +56,9 @@ def writeDataErrToLog(data, value, tips=""):
 			%(funcName, data, value, line, tips))
 	try:
 		adaptor.closeDriver()
-		os._exit(0)
-	except :
-		print('catch error, exit')
+		sys.exit()
+	except Exception as e:
+		print e.__class__
 
 def writeInfo(info):
 	with open(logDir, 'a') as fileObject:
@@ -67,20 +71,4 @@ def unitTestLog(title):
 		fileObject.write(strw)
 
 if __name__ == '__main__':
-	data = {
-		'mode' : 'dhcp',#dhcp
-		'dns1': '114.114.114.114',
-		'dns2': '8.8.8.8',
-		'mtu': '1492',
-		'pppoePwd': '',
-		'pppoeUser': '',
-		'ip': '192.168.2.1',
-		'subMask': '255.255.255.0',
-		'gateway': '192.168.2.1',
-		'moreSet' : 'False'
-	}
-	writeFuncLog(data,1)
-	writewebErrToLog()
-	writeDataErrToLog('test', 111, 'dhlakhdla')
-
-
+	pass

@@ -27,8 +27,7 @@ class upnpClass(object):
 		else :
 			adaptor.alwaysCloseSwitch('//*[@id="UpnpSwitch"]', 'data-value')
 
+@log.writeFuncLog
 def main(data):
-	log.writeFuncLog(data, 1)
 	upnpObj = upnpClass(data)
 	upnpObj.upnp()
-	log.writeFuncLog(data, 2)

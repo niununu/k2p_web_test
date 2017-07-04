@@ -24,9 +24,7 @@ class dmzClass(object):
 		adaptor.waitandSendkeys('//*[@id="DmzIp"]', self.ip)
 		adaptor.waitandClick('//*[@id="Save"]')
 
+@log.writeFuncLog
 def main(data):
-	log.writeFuncLog(data, 1)
 	dmzObj = dmzClass(data)
-
 	dmzObj.setDmz()
-	log.writeFuncLog(data, 2)
