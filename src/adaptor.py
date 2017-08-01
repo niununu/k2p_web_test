@@ -42,18 +42,18 @@ def exceptCheck(fun):
 
 @exceptCheck
 def waitandClick(xpath):
-	WebDriverWait(driver, 1).until(EC.element_to_be_clickable((By.XPATH, xpath)))
+	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, xpath)))
 	driver.find_element_by_xpath(xpath).click()
 
 @exceptCheck
 def waitandSendkeys(xpath, keys):
-	WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, xpath)))
+	WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	driver.find_element_by_xpath(xpath).clear()
 	driver.find_element_by_xpath(xpath).send_keys(keys)
 
 @exceptCheck
 def alwaysOpenSwitch(xpath, switchValue='data-value'):
-	WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpath)))
+	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, xpath)))
 	button = driver.find_element_by_xpath(xpath)
 	if button.get_attribute(switchValue) == '0':
 		button.click()
@@ -61,7 +61,7 @@ def alwaysOpenSwitch(xpath, switchValue='data-value'):
 
 @exceptCheck
 def alwaysCloseSwitch(xpath, switchValue='data-value'):
-	WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpath)))
+	WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, xpath)))
 	button = driver.find_element_by_xpath(xpath)
 	if button.get_attribute(switchValue) == '1':
 		button.click()
@@ -74,9 +74,9 @@ def waitforDisappear(xpath):
 
 @exceptCheck
 def waitforDisplay(xpath):
-	WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+	WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, xpath)))
 	process = driver.find_element_by_xpath(xpath)
-	WebDriverWait(driver, 10).until(lambda driver: process.is_displayed())
+	WebDriverWait(driver, 20).until(lambda driver: process.is_displayed())
 
 
 def openDriver():

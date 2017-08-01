@@ -1,4 +1,4 @@
-import sys 
+import sys
 sys.path.append('../../k2p_web_test')
 from data import *
 from src import *
@@ -31,9 +31,10 @@ def delRule():
 
 def main():
 	login.main(loginData.login_data)
-	#addRule()
-	#modifyRule()
-	delRule()
+	addRule()
+	modifyRule()
+	#delRule()
+	adaptor.closeDriver()
 
 if __name__ == '__main__':
 	main()

@@ -3,9 +3,9 @@
 guide_data_1 = {
 	#'setPwd' : 'False',#True,设置密码
 	'login_pwd': 'admin',
-	'ssid_24G': '@PHICOMM_A9_uill',
+	'ssid_24G': '@AAA_A9_uill',
 	'pwd_24G': '12345678',
-	'ssid_5G': '@PHICOMM_A9_uill_5g',
+	'ssid_5G': '@AAA_A9_uill_5g',
 	'pwd_5G' : '12345678',
 	'network_mode': 'dhcp'
 }
